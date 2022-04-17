@@ -114,7 +114,7 @@ node x2y2[100004*2];
 int t=-1;
 
 node merge(node a, node b)
-{
+{ 
     node result;
     if (t==-1)
     {
@@ -257,6 +257,7 @@ int main(void)
     for (int i=0;i<n;i++)
     {
         cin >> x1 >> y1 >> x2 >> y2;
+        x1--; y1--;
         ytemp.x=x1;
         ytemp.y=y1;
         ytemp.xy=x1*y1;
