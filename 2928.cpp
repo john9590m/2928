@@ -6,44 +6,6 @@ using namespace std;
 
 int n,m;
 
-/*struct segt
-{
-    node t[n * 2];
-    node merge(node a, node b)
-    {
-        // 두 노드가 합쳐진 결과 정점을 반환해야 한다.
-        // 위 예제에서는 a+b에 해당한다.
-    }
-    void update(int s, int e, int x, int p, node v)
-    {
-        if (s == e)
-            t[x] = v;
-        else
-        {
-            int m = (s + e) / 2;
-            if (p <= m)
-                update(s, m, 2 * x, p, v);
-            else
-                update(m + 1, e, 2 * x + 1, p, v);
-            t[x] = merge(t[2 * x], t[2 * x + 1]);
-        }
-    }
-    void update(int p, node v) { return update(0, MAXN, 1, p, v); }
-    node query(int s, int e, int x, int l, int r)
-    {
-        if (l <= s and e <= r)
-            return t[x];
-        else if (l <= e and s <= r)
-        {
-            int m = (s + e) / 2;
-            return merge(query(s, m, 2 * x, l, r), query(m + 1, e, 2 * x + 1, l, r));
-        }
-        else
-            return I; // 다른 연산에 영향을 주지 않는 항등원 역할을 하는 정점을 반환해야 한다. 위 예제에서는 0에 해당한다.
-    }
-    node query(int l, int r) { return query(0, MAXN, 1, l, r); }
-};*/
-
 class ynode
 {
 public:
@@ -112,7 +74,7 @@ public:
             return merge(query(s, m, 2 * x, l, r), query(m + 1, e, 2 * x + 1, l, r));
         }
         else
-            return I; // 다른 연산에 영향을 주지 않는 항등원 역할을 하는 정점을 반환해야 한다. 위 예제에서는 0에 해당한다.
+            return I; 
     }
     void init()
     {
