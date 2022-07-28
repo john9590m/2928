@@ -263,12 +263,14 @@ y2node nodeinit(y2node y)
 y1node nodeinit(y1node x1)
 {
     y1node r;
-    y2node r1,r2;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),t) - r.ar.begin();
+    y2node r1,r2,tm,tp;
+    tm.y2 = -t;
+    tp.y2 = t;
+    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
+    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
     r1=query(x1.seg,1,0,n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
+    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     r2=query(x1.seg,1,0,n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
@@ -277,12 +279,14 @@ y1node nodeinit(y1node x1)
 x2node nodeinit(x2node x1)
 {
     x2node r;
-    y1node r1,r2;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),t) - r.ar.begin();
+    y1node r1,r2,tm,tp;
+    tm.y1 = -t;
+    tp.y1 = t;
+    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
+    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
     r1=query(x1.seg,1,0,n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
+    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     r2=query(x1.seg,1,0,n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
@@ -291,12 +295,14 @@ x2node nodeinit(x2node x1)
 x1node nodeinit(x1node x1)
 {
     x1node r;
-    x2node r1,r2;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),t) - r.ar.begin();
+    x2node r1,r2,tm,tp;
+    tm.x2 = -t;
+    tp.x2 = t;
+    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
+    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
     r1=query(x1.seg,1,0,n-1,0,a);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),-t) - r.ar.begin();
+    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     r2=query(x1.seg,1,0,n-1,a,b);
     for (int j=0;j<2;j++) for (int i=4;i<8;i++) r.arr[8*j+i]=r2.arr[8*j+i];
     return r;
@@ -340,12 +346,14 @@ x1node query(int node, int start, int end, int left, int right)
 
 long long result()
 {
-    x1node r1,r2;
-    int a = lower_bound(ar.begin(),ar.end(),-t) - ar.begin();
-    int b = lower_bound(ar.begin(),ar.end(),t) - ar.begin();
+    x1node r1,r2,tm,tp;
+    tm.x1 = -t;
+    tp.x1 = t;
+    int a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin();
+    int b = lower_bound(ar.begin(),ar.end(),tp) - ar.begin();
     r1=query(1,0,n-1,0,a);
     for (int i=0;i<8;i++) arr[i]=r1.arr[i];
-    a = upper_bound(ar.begin(),ar.end(),-t) - ar.begin();
+    a = upper_bound(ar.begin(),ar.end(),tm) - ar.begin();
     r2=query(1,0,n-1,a,b);
     for (int i=8;i<16;i++) arr[i]=r2.arr[i];
 }
