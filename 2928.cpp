@@ -4,7 +4,7 @@
 
 using namespace std;
 
-typedef struct y2node{
+struct y2node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
     bool operator< (const y2node &a) const
     {
@@ -25,7 +25,7 @@ typedef struct y2node{
     }
 };
 
-typedef struct y1node{
+struct y1node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
     vector<y2node> seg, ar;
     bool operator< (const y1node &a) const
@@ -47,7 +47,7 @@ typedef struct y1node{
     }
 };
 
-typedef struct x2node{
+struct x2node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
     vector<y1node> seg, ar;
     bool operator< (const x2node &a) const
@@ -69,7 +69,7 @@ typedef struct x2node{
     }
 };
 
-typedef struct x1node{
+struct x1node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
     vector<x2node> seg, ar;
     bool operator< (const x1node &a) const
@@ -96,6 +96,15 @@ vector<x1node> ar;
 vector<x1node> seg;
 int arr[16];
 int n,m,t=-1;
+
+y2node seginit(vector<y2node> seg, vector<y2node> ar, int node, int start, int end);
+y1node seginit(vector<y1node> seg, vector<y1node> ar, int node, int start, int end);
+x2node seginit(vector<x2node> seg, vector<x2node> ar, int node, int start, int end);
+x1node seginit(int node, int start, int end);
+y2node query(vector<y2node> seg,int node, int start, int end, int left, int right);
+y1node query(vector<y1node> seg,int node, int start, int end, int left, int right);
+x2node query(vector<x2node> seg,int node, int start, int end, int left, int right);
+x1node query(int node, int start, int end, int left, int right);
 
 y2node combine (y2node a,y2node b)
 {
