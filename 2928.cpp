@@ -4,40 +4,92 @@
 
 using namespace std;
 
-typedef struct _y2node_{
+typedef struct y2node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
-    friend bool operator< (_y2node_ &a, _y2node_ &b)
+    bool operator< (const y2node &a) const
     {
-        return a.y2<b.y2;
+        return y2<a.y2;
     }
-}y2node;
+    y2node& operator= (const y2node &a)
+    {
+         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        x1 = a.x1;
+        x2 = a.x2;
+        y1 = a.y1;
+        y2 = a.y2;
+        x1y1 = a.x1y1;
+        x2y1 = a.x2y1;
+        x1y2 = a.x1y2;
+        x2y2 = a.x2y2;
+        return *this;
+    }
+};
 
-typedef struct _y1node_{
+typedef struct y1node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
-    vector<_y2node_> seg, ar;
-    friend bool operator< (_y1node_ &a, _y1node_ &b)
+    vector<y2node> seg, ar;
+    bool operator< (const y1node &a) const
     {
-        return a.y1<b.y1;
+        return y2<a.y2;
     }
-}y1node;
+    y1node& operator= (const y1node &a)
+    {
+         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        x1 = a.x1;
+        x2 = a.x2;
+        y1 = a.y1;
+        y2 = a.y2;
+        x1y1 = a.x1y1;
+        x2y1 = a.x2y1;
+        x1y2 = a.x1y2;
+        x2y2 = a.x2y2;
+        return *this;
+    }
+};
 
-typedef struct _x2node_{
+typedef struct x2node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
-    vector<_y1node_> seg, ar;
-    friend bool operator< (_x2node_ &a, _x2node_ &b)
+    vector<y1node> seg, ar;
+    bool operator< (const x2node &a) const
     {
-        return a.x2<b.x2;
+        return y2<a.y2;
     }
-}x2node;
+    x2node& operator= (const x2node &a)
+    {
+         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        x1 = a.x1;
+        x2 = a.x2;
+        y1 = a.y1;
+        y2 = a.y2;
+        x1y1 = a.x1y1;
+        x2y1 = a.x2y1;
+        x1y2 = a.x1y2;
+        x2y2 = a.x2y2;
+        return *this;
+    }
+};
 
-typedef struct _x1node_{
+typedef struct x1node{
     int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
-    vector<_x2node_> seg, ar;
-    friend bool operator< (_x1node_ &a, _x1node_ &b)
+    vector<x2node> seg, ar;
+    bool operator< (const x1node &a) const
     {
-        return a.x1<b.x1;
+        return y2<a.y2;
     }
-}x1node;
+    x1node& operator= (const x1node &a)
+    {
+         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        x1 = a.x1;
+        x2 = a.x2;
+        y1 = a.y1;
+        y2 = a.y2;
+        x1y1 = a.x1y1;
+        x2y1 = a.x2y1;
+        x1y2 = a.x1y2;
+        x2y2 = a.x2y2;
+        return *this;
+    }
+};
 
 
 vector<x1node> ar;
