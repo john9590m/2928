@@ -131,7 +131,7 @@ y1node combine (y1node a,y1node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n-1>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -146,7 +146,7 @@ x2node combine (x2node a,x2node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n-1>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -161,7 +161,7 @@ x1node combine (x1node a,x1node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n-1>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -360,11 +360,13 @@ long long result()
     tp.x1 = t;
     int a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin();
     int b = lower_bound(ar.begin(),ar.end(),tp) - ar.begin();
-    r1=query(1,0,n-1,0,a);
-    for (int i=0;i<8;i++) arr[i]=r1.arr[i];
+    long long r=0;
+    if (n>0) r1=query(1,0,n-1,0,a);
+    for (int i=0;i<8;i++) r=r1.arr[i];
     a = upper_bound(ar.begin(),ar.end(),tm) - ar.begin();
     r2=query(1,0,n-1,a,b);
-    for (int i=8;i<16;i++) arr[i]=r2.arr[i];
+    for (int i=8;i<16;i++) r=r2.arr[i];
+    return r;
 }
 
 int main(void)
