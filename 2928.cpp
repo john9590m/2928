@@ -5,7 +5,7 @@
 using namespace std;
 
 struct y2node{
-    int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
+    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
     bool operator< (const y2node &a) const
     {
         return y2<a.y2;
@@ -26,7 +26,7 @@ struct y2node{
 };
 
 struct y1node{
-    int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
+    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
     vector<y2node> seg, ar;
     bool operator< (const y1node &a) const
     {
@@ -48,7 +48,7 @@ struct y1node{
 };
 
 struct x2node{
-    int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
+    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
     vector<y1node> seg, ar;
     bool operator< (const x2node &a) const
     {
@@ -70,7 +70,7 @@ struct x2node{
 };
 
 struct x1node{
-    int x1,x2,y1,y2,x1y1,x1y2,x2y1,x2y2,n,arr[16];
+    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
     vector<x2node> seg, ar;
     bool operator< (const x1node &a) const
     {
@@ -277,10 +277,10 @@ y1node nodeinit(y1node x1)
     tp.y2 = t;
     int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,n-1,0,a);
+    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
     a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,n-1,a,b);
+    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
 }
@@ -293,10 +293,10 @@ x2node nodeinit(x2node x1)
     tp.y1 = t;
     int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,n-1,0,a);
+    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
     a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,n-1,a,b);
+    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
 }
@@ -309,10 +309,10 @@ x1node nodeinit(x1node x1)
     tp.x2 = t;
     int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
     int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,n-1,0,a);
+    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
     a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,n-1,a,b);
+    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=4;i<8;i++) r.arr[8*j+i]=r2.arr[8*j+i];
     return r;
 }
@@ -364,7 +364,7 @@ long long result()
     if (n>0) r1=query(1,0,n-1,0,a);
     for (int i=0;i<8;i++) r=r1.arr[i];
     a = upper_bound(ar.begin(),ar.end(),tm) - ar.begin();
-    r2=query(1,0,n-1,a,b);
+    if (n>0) r2=query(1,0,n-1,a,b);
     for (int i=8;i<16;i++) r=r2.arr[i];
     return r;
 }
@@ -388,6 +388,6 @@ int main(void)
     for (int i=0;i<m;i++)
     {
         cin >> t;
-        cout << result();
+        cout << result() << endl;
     }
 }
