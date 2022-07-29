@@ -166,7 +166,7 @@ x1node combine (x1node a,x1node b)
     return r;
 }
 
-y1node y1init(y1node a)
+void y1init(y1node &a)
 {
     y2node b;
     b.x1=a.x1;
@@ -177,11 +177,12 @@ y1node y1init(y1node a)
     b.x1y2=a.x1y2;
     b.x2y1=a.x2y1;
     b.x2y2=a.x2y2;
+    b.n=1;
+    for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
-    return a;
 }
 
-x2node x2init(x2node a)
+void x2init(x2node &a)
 {
     y1node b;
     b.x1=a.x1;
@@ -192,12 +193,13 @@ x2node x2init(x2node a)
     b.x1y2=a.x1y2;
     b.x2y1=a.x2y1;
     b.x2y2=a.x2y2;
-    b = y1init(b);
+    y1init(b);
+    b.n=1;
+    for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
-    return a;
 }
 
-x1node x1init(x1node a)
+void x1init(x1node &a)
 {
     x2node b;
     b.x1=a.x1;
@@ -208,9 +210,10 @@ x1node x1init(x1node a)
     b.x1y2=a.x1y2;
     b.x2y1=a.x2y1;
     b.x2y2=a.x2y2;
-    b = x2init(b);
+    b.n=1;
+    x2init(b);
+    for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
-    return a;
 }
 
 y2node seginit(vector<y2node> seg, vector<y2node> ar, int node, int start, int end)
@@ -243,7 +246,7 @@ x1node seginit(int node, int start, int end)
 
 void init()
 {
-    for (int i=0;i<n;i++) ar[i] = x1init(ar[i]);
+    for (int i=0;i<n;i++) x1init(ar[i]);
     sort(ar.begin(),ar.end());
     seg.resize(2*n + 1);
     seginit(1,0,n-1);
@@ -381,6 +384,7 @@ int main(void)
         a.x2y1 = a.x2*a.y1;
         a.x2y2 = a.x2*a.y2;
         a.n=1;
+        for (int i=0; i<16; i++)  a.arr[i] = 0;
         ar.push_back(a);
     }
     init(); 
