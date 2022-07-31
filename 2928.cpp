@@ -346,7 +346,7 @@ x1node nodeinit(x1node x1)
     tp.x2 = t;
     int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
     int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
-    if (x1.n>0&&b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
+    if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
     b = lower_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin();
     if (x1.n>0&&x1.n-1>=b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
@@ -357,7 +357,11 @@ x1node nodeinit(x1node x1)
 y2node query(vector<y2node> seg,int node, int start, int end, int left, int right)
 {
     y2node I;
-    if (left > end || right < start) return I;
+    if (left > end || right < start)
+    {
+        for (int i=0;i<16;i++) I.arr[i] = 0;
+        return I;
+    }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
     return combine(query(seg,node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
@@ -366,7 +370,11 @@ y2node query(vector<y2node> seg,int node, int start, int end, int left, int righ
 y1node query(vector<y1node> seg,int node, int start, int end, int left, int right)
 {
     y1node I;
-    if (left > end || right < start) return I;
+    if (left > end || right < start)
+    {
+        for (int i=0;i<16;i++) I.arr[i] = 0;
+        return I;
+    }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
     return combine(query(seg,node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
@@ -375,7 +383,11 @@ y1node query(vector<y1node> seg,int node, int start, int end, int left, int righ
 x2node query(vector<x2node> seg,int node, int start, int end, int left, int right)
 {
     x2node I;
-    if (left > end || right < start) return I;
+    if (left > end || right < start)     
+    {
+        for (int i=0;i<16;i++) I.arr[i] = 0;
+        return I;
+    }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
     return combine(query(seg,node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
@@ -384,7 +396,11 @@ x2node query(vector<x2node> seg,int node, int start, int end, int left, int righ
 x1node query(int node, int start, int end, int left, int right)
 {
     x1node I;
-    if (left > end || right < start) return I;
+    if (left > end || right < start) 
+    {
+        for (int i=0;i<16;i++) I.arr[i] = 0;
+        return I;
+    }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
     return combine(query(node*2,start,mid,left,right),query(node*2+1,mid+1,end,left,right));
