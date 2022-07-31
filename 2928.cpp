@@ -21,6 +21,7 @@ struct y2node{
         x2y1 = a.x2y1;
         x1y2 = a.x1y2;
         x2y2 = a.x2y2;
+        n = a.n;
         return *this;
     }
 };
@@ -35,6 +36,7 @@ struct y1node{
     y1node& operator= (const y1node &a)
     {
         ar = a.ar;
+        seg = a.seg;
         for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
@@ -44,6 +46,7 @@ struct y1node{
         x2y1 = a.x2y1;
         x1y2 = a.x1y2;
         x2y2 = a.x2y2;
+        n = a.n;
         return *this;
     }
 };
@@ -58,6 +61,7 @@ struct x2node{
     x2node& operator= (const x2node &a)
     {
         ar = a.ar;
+        seg = a.seg;
         for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
@@ -67,6 +71,7 @@ struct x2node{
         x2y1 = a.x2y1;
         x1y2 = a.x1y2;
         x2y2 = a.x2y2;
+        n = a.n;
         return *this;
     }
 };
@@ -81,7 +86,8 @@ struct x1node{
     x1node& operator= (const x1node &a)
     {
         ar = a.ar;
-        for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        seg = a.seg;
+        for (int i=0;i<16;i++) arr[i]=a.arr[i]; 
         x1 = a.x1;
         x2 = a.x2;
         y1 = a.y1;
@@ -90,6 +96,7 @@ struct x1node{
         x2y1 = a.x2y1;
         x1y2 = a.x1y2;
         x2y2 = a.x2y2;
+        n = a.n;
         return *this;
     }
 };
@@ -100,9 +107,9 @@ vector<x1node> seg;
 int arr[16];
 int n,m,t=-1;
 
-y2node seginit(vector<y2node> seg, vector<y2node> ar, int node, int start, int end);
-y1node seginit(vector<y1node> seg, vector<y1node> ar, int node, int start, int end);
-x2node seginit(vector<x2node> seg, vector<x2node> ar, int node, int start, int end);
+y2node y2seginit(vector<y2node> &seg, vector<y2node> ar, int node, int start, int end);
+y1node y1seginit(vector<y1node> &seg, vector<y1node> ar, int node, int start, int end);
+x2node x2seginit(vector<x2node> &seg, vector<x2node> ar, int node, int start, int end);
 x1node seginit(int node, int start, int end);
 y2node query(vector<y2node> seg,int node, int start, int end, int left, int right);
 y1node query(vector<y1node> seg,int node, int start, int end, int left, int right);
@@ -121,10 +128,10 @@ y2node combine (y2node a,y2node b)
     r.x2y1 = a.x2y1 + b.x2y1;
     r.x1y2 = a.x1y2 + b.x1y2;
     r.x2y2 = a.x2y2 + b.x2y2;
+    r.n = a.n + b.n;
     return r;
 }
 y1node combine (y1node a,y1node b)
-
 {
     y1node r;
     for (int i=0;i<16;i++) r.arr[i]=a.arr[i]+b.arr[i];
@@ -134,7 +141,8 @@ y1node combine (y1node a,y1node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        r.seg.resize(2*r.n+1);
+        if (r.n>0) y2seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -149,7 +157,8 @@ x2node combine (x2node a,x2node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        r.seg.resize(2*r.n+1);
+        if (r.n>0) y1seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -164,7 +173,8 @@ x1node combine (x1node a,x1node b)
         r.n = a.n+b.n;
         for (int i=0;i<b.ar.size();i++) r.ar.push_back(b.ar[i]); 
         sort(r.ar.begin(),r.ar.end()); 
-        if (r.n>0) seginit(r.seg,r.ar,1,0,r.n-1);
+        r.seg.resize(2*r.n+1);
+        if (r.n>0) x2seginit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
@@ -183,6 +193,8 @@ void y1init(y1node &a)
     b.n=1;
     for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
+    a.seg.resize(2);
+    y2seginit(a.seg,a.ar,1,0,0);
 }
 
 void x2init(x2node &a)
@@ -200,6 +212,8 @@ void x2init(x2node &a)
     b.n=1;
     for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
+    a.seg.resize(2);
+    y1seginit(a.seg,a.ar,1,0,0);
 }
 
 void x1init(x1node &a)
@@ -217,27 +231,29 @@ void x1init(x1node &a)
     x2init(b);
     for (int i =0; i<16; i++) b.arr[i]=0;
     a.ar.push_back(b);
+    a.seg.resize(2);
+    x2seginit(a.seg,a.ar,1,0,0);
 }
 
-y2node seginit(vector<y2node> seg, vector<y2node> ar, int node, int start, int end)
+y2node y2seginit(vector<y2node> &seg, vector<y2node> ar, int node, int start, int end)
 {
     if (start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(seginit(seg,ar,node*2,start,mid),seginit(seg,ar,node*2+1,mid+1,end));
+    return seg[node] = combine(y2seginit(seg,ar,node*2,start,mid),y2seginit(seg,ar,node*2+1,mid+1,end));
 }
 
-y1node seginit(vector<y1node> seg, vector<y1node> ar, int node, int start, int end)
+y1node y1seginit(vector<y1node> &seg, vector<y1node> ar, int node, int start, int end)
 {
     if (start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(seginit(seg,ar,node*2,start,mid),seginit(seg,ar,node*2+1,mid+1,end));
+    return seg[node] = combine(y1seginit(seg,ar,node*2,start,mid),y1seginit(seg,ar,node*2+1,mid+1,end));
 }
 
-x2node seginit(vector<x2node> seg, vector<x2node> ar, int node, int start, int end)
+x2node x2seginit(vector<x2node> &seg, vector<x2node> ar, int node, int start, int end)
 {
     if (start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(seginit(seg,ar,node*2,start,mid),seginit(seg,ar,node*2+1,mid+1,end));
+    return seg[node] = combine(x2seginit(seg,ar,node*2,start,mid),x2seginit(seg,ar,node*2+1,mid+1,end));
 }
 
 x1node seginit(int node, int start, int end)
@@ -279,14 +295,19 @@ y1node nodeinit(y1node x1)
 {
     y1node r;
     y2node r1,r2,tm,tp;
+    for (int i=0;i<16;i++)
+    {
+        r1.arr[i]=0;
+        r2.arr[i]=0;
+    }
     tm.y2 = -t;
     tp.y2 = t;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
+    int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
+    if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
+    b = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    if (x1.n>0 && x1.n-1 >= b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
 }
@@ -295,14 +316,19 @@ x2node nodeinit(x2node x1)
 {
     x2node r;
     y1node r1,r2,tm,tp;
+    for (int i=0;i<16;i++)
+    {
+        r1.arr[i]=0;
+        r2.arr[i]=0;
+    }
     tm.y1 = -t;
     tp.y1 = t;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
+    int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin() -1;
+    int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() -1;
+    if (x1.n>0 && a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
+    a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    if (x1.n>0 && b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
 }
@@ -311,14 +337,19 @@ x1node nodeinit(x1node x1)
 {
     x1node r;
     x2node r1,r2,tm,tp;
+    for (int i=0;i<16;i++)
+    {
+        r1.arr[i]=0;
+        r2.arr[i]=0;
+    }
     tm.x2 = -t;
     tp.x2 = t;
-    int a = lower_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    int b = lower_bound(r.ar.begin(),r.ar.end(),tp) - r.ar.begin();
-    if (n>0) r1=query(x1.seg,1,0,x1.n-1,0,a);
+    int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
+    if (x1.n>0&&b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
-    a = upper_bound(r.ar.begin(),r.ar.end(),tm) - r.ar.begin();
-    if (n>0) r2=query(x1.seg,1,0,x1.n-1,a,b);
+    b = lower_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin();
+    if (x1.n>0&&x1.n-1>=b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
     for (int j=0;j<2;j++) for (int i=4;i<8;i++) r.arr[8*j+i]=r2.arr[8*j+i];
     return r;
 }
@@ -364,13 +395,18 @@ long long result()
     x1node r1,r2,tm,tp;
     tm.x1 = -t;
     tp.x1 = t;
-    int a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin();
-    int b = lower_bound(ar.begin(),ar.end(),tp) - ar.begin();
+    for (int i=0;i<16;i++)
+    {
+        r1.arr[i]=0;
+        r2.arr[i]=0;
+    }
+    int a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin() - 1;
+    int b = upper_bound(ar.begin(),ar.end(),tp) - ar.begin() - 1;
     long long r=0;
-    if (n>0) r1=query(1,0,n-1,0,a);
+    if (n>0&&a>=0) r1=query(1,0,n-1,0,a);
     for (int i=0;i<8;i++) r=r1.arr[i];
-    a = upper_bound(ar.begin(),ar.end(),tm) - ar.begin();
-    if (n>0) r2=query(1,0,n-1,a,b);
+    a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin();
+    if (n>0&&b>=a) r2=query(1,0,n-1,a,b);
     for (int i=8;i<16;i++) r=r2.arr[i];
     return r;
 }
