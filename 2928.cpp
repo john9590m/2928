@@ -12,7 +12,7 @@ struct y2node{
     }
     y2node& operator= (const y2node &a)
     {
-         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
         y1 = a.y1;
@@ -30,11 +30,12 @@ struct y1node{
     vector<y2node> seg, ar;
     bool operator< (const y1node &a) const
     {
-        return y2<a.y2;
+        return y1<a.y1;
     }
     y1node& operator= (const y1node &a)
     {
-         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        ar = a.ar;
+        for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
         y1 = a.y1;
@@ -52,11 +53,12 @@ struct x2node{
     vector<y1node> seg, ar;
     bool operator< (const x2node &a) const
     {
-        return y2<a.y2;
+        return x2<a.x2;
     }
     x2node& operator= (const x2node &a)
     {
-         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        ar = a.ar;
+        for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
         y1 = a.y1;
@@ -74,11 +76,12 @@ struct x1node{
     vector<x2node> seg, ar;
     bool operator< (const x1node &a) const
     {
-        return y2<a.y2;
+        return x1<a.x1;
     }
     x1node& operator= (const x1node &a)
     {
-         for (int i=0;i<16;i++) arr[i]=a.arr[i];
+        ar = a.ar;
+        for (int i=0;i<16;i++) arr[i]=a.arr[i];
         x1 = a.x1;
         x2 = a.x2;
         y1 = a.y1;
