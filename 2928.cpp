@@ -5,7 +5,8 @@
 using namespace std;
 
 struct y2node{
-    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
+    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0;
+    long long arr[16];
     bool operator< (const y2node &a) const
     {
         return y2<a.y2;
@@ -27,7 +28,8 @@ struct y2node{
 };
 
 struct y1node{
-    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
+    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0;
+    long long arr[16];
     vector<y2node> seg, ar;
     bool operator< (const y1node &a) const
     {
@@ -52,7 +54,8 @@ struct y1node{
 };
 
 struct x2node{
-    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
+    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0;
+    long long arr[16];
     vector<y1node> seg, ar;
     bool operator< (const x2node &a) const
     {
@@ -77,7 +80,8 @@ struct x2node{
 };
 
 struct x1node{
-    int x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0,arr[16];
+    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0;
+    long long arr[16];
     vector<x2node> seg, ar;
     bool operator< (const x1node &a) const
     {
@@ -104,8 +108,8 @@ struct x1node{
 
 vector<x1node> ar;
 vector<x1node> seg;
-int arr[16];
-int n,m,t=-1;
+long long arr[16];
+long long n,m,t=-1;
 
 y2node y2seginit(vector<y2node> &seg, vector<y2node> ar, int node, int start, int end);
 y1node y1seginit(vector<y1node> &seg, vector<y1node> ar, int node, int start, int end);
@@ -297,6 +301,7 @@ y1node nodeinit(y1node x1)
     y2node r1,r2,tm,tp;
     for (int i=0;i<16;i++)
     {
+        r.arr[i] = 0;
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
@@ -305,10 +310,10 @@ y1node nodeinit(y1node x1)
     int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
     int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
-    for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    b = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    for (int j=0;j<8;j++) r.arr[2*j]=r1.arr[2*j];
+    b++;
     if (x1.n>0 && x1.n-1 >= b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
-    for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
+    for (int j=0;j<8;j++) r.arr[2*j+1]=r2.arr[2*j+1];
     return r;
 }
 
@@ -318,6 +323,7 @@ x2node nodeinit(x2node x1)
     y1node r1,r2,tm,tp;
     for (int i=0;i<16;i++)
     {
+        r.arr[i] = 0;
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
@@ -327,7 +333,7 @@ x2node nodeinit(x2node x1)
     int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() -1;
     if (x1.n>0 && a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
+    a++;
     if (x1.n>0 && b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
     return r;
@@ -339,6 +345,7 @@ x1node nodeinit(x1node x1)
     x2node r1,r2,tm,tp;
     for (int i=0;i<16;i++)
     {
+        r.arr[i] = 0;
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
@@ -348,7 +355,7 @@ x1node nodeinit(x1node x1)
     int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
-    b = lower_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin();
+    b++;
     if (x1.n>0&&x1.n-1>=b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
     for (int j=0;j<2;j++) for (int i=4;i<8;i++) r.arr[8*j+i]=r2.arr[8*j+i];
     return r;
@@ -420,10 +427,10 @@ long long result()
     int b = upper_bound(ar.begin(),ar.end(),tp) - ar.begin() - 1;
     long long r=0;
     if (n>0&&a>=0) r1=query(1,0,n-1,0,a);
-    for (int i=0;i<8;i++) r=r1.arr[i];
-    a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin();
+    for (int i=0;i<8;i++) r+=r1.arr[i];
+    a++;
     if (n>0&&b>=a) r2=query(1,0,n-1,a,b);
-    for (int i=8;i<16;i++) r=r2.arr[i];
+    for (int i=8;i<16;i++) r+=r2.arr[i];
     return r;
 }
 
