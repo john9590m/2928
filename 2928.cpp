@@ -277,22 +277,23 @@ void init()
 
 y2node nodeinit(y2node y)
 {
-    y.arr[0] = y.x2y2 + y.x1 * t + y.y1 * t + t * t; //(y2+t)(x2+t)
-    y.arr[1] = y.x2 * t * 2 + y.x2 + 2 * t * t + t; //(x2+t)(2t+1)
-    y.arr[2] = y.x2y2 - y.x2y1 - y.y1 * t + y.y2 * t; //(y2-y1)(x2+t)
-    y.arr[3] = -y.x2y1 + (t + 1) * y.x2 + (t + 1 - y.y1) * t; //(t+1-y1)(x2+t)
-    y.arr[4] = y.y2 * t * 2 + 2 * t * t + y.y2 + t; //(2t+1)(y2+t)
+    //n이랑 상관이 있어야한다
+    y.arr[0] = y.x2y2 + y.x2*t  + y.x2 + y.y2*t + t*t + t + y.y2 + t + 1; //(y2+t+1)(x2+t+1)
+    y.arr[1] = y.x2 * t * 2 + y.x2 + 2 * t * t + t + 2*t + 1; //(x2+t+1)(2t+1)
+    y.arr[2] = y.x2y2 - y.x2y1 + y.x2 - y.y1 * t + y.y2 * t + t +y.y2 - y.y1 + 1; //(y2-y1+1)(x2+t+1)
+    y.arr[3] = -y.x2y1 + (t + 1) * y.x2 + (t + 1 - y.y1) * (t+1); //(t+1-y1)(x2+t+1)
+    y.arr[4] = (2*t+1) * (y.y2+t+1); //(2t+1)(y2+t+1)
     y.arr[5] = 4 * t * t + 4 * t + 1; //(2t+1)(2t+1)
-    y.arr[6] = y.y2 * t * 2 - y.y1 * t * 2 + y.y2 - y.y1; //(y2-y1)(2t+1)
+    y.arr[6] = y.y2 * t * 2 - y.y1 * t * 2 + y.y2 - y.y1; //(y2-y1+1)(2t+1)
     y.arr[7] = (t + 1 - y.y1) * (2 * t + 1); //(t+1-y1)(2t+1)
-    y.arr[8] = y.x2y2 - y.x1y2 + y.x2 * t - y.x1 * t; //(y2+t)(x2-x1)
-    y.arr[9] = y.x2 * t * 2 - y.x1 * t * 2 + y.x2 - y.x1; //(2t+1)(x2-x1)
-    y.arr[10] = y.x2y2 + y.x1y1 - y.x1y2 - y.x2y1; //(y2-y1)(x2-x1)
-    y.arr[11] = -y.x2y1 + y.x1y1 + (t + 1) * (y.x2 - y.x1); //(t + 1 -y1)(x2-x1)
-    y.arr[12] = -y.x1y2 - y.x1 * t + (t + 1) * (y.y2 + t); //(y2+t)(t+1-x1)
+    y.arr[8] = y.x2y2 - y.x1y2 + y.x2 * t - y.x1 * t; //(y2+t+1)(x2-x1+1)
+    y.arr[9] = y.x2 * t * 2 - y.x1 * t * 2 + y.x2 - y.x1; //(2t+1)(x2-x1+1)
+    y.arr[10] = y.x2y2 + y.x1y1 - y.x1y2 - y.x2y1; //(y2-y1+1)(x2-x1+1)
+    y.arr[11] = -y.x2y1 + y.x1y1 + (t + 1) * (y.x2 - y.x1); //(t + 1 -y1)(x2-x1+1)
+    y.arr[12] = -y.x1y2 - y.x1 * t + (t + 1) * (y.y2 + t); //(y2+t+1)(t+1-x1)
     y.arr[13] = (2 * t + 1) * (t + 1 - y.x1); //(2t+1)(t+1-x1)
-    y.arr[14] = -y.x1y2 + y.x1y1 + (t + 1) * (y.y2 - y.y1); //(y2-y1)(t + 1-x1)
-    y.arr[15] = y.x1y1 - (t + 1) * y.y1 - (t + 1) * y.x1 + (t + 1) * (t + 1); //(t+1 - y1)(t+1-x1)
+    y.arr[14] = -y.x1y2 + y.x1y1 + (t + 1) * (y.y2 - y.y1); //(y2-y1+1)(t + 1-x1)
+    y.arr[15] = y.x1y1 - (t + 1) * y.y1 - (t + 1) * y.x1 + (t + 1) * (t + 1); //(t+1 - y1)(t+1-x1)  
     return y;
 }
 y1node nodeinit(y1node x1)
@@ -308,7 +309,7 @@ y1node nodeinit(y1node x1)
     tm.y2 = -t;
     tp.y2 = t;
     int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
-    int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
+    int b = lower_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<8;j++) r.arr[2*j]=r1.arr[2*j];
     b++;
@@ -352,7 +353,7 @@ x1node nodeinit(x1node x1)
     tm.x2 = -t;
     tp.x2 = t;
     int a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin();
-    int b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
+    int b = lower_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
     b++;
