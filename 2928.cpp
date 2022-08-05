@@ -277,23 +277,32 @@ void init()
 
 y2node nodeinit(y2node y)
 {
+	long long n = y.n;
     //n이랑 상관이 있어야한다
-    y.arr[0] = y.x2y2 + y.x2*t  + y.x2 + y.y2*t + t*t + t + y.y2 + t + 1; //(y2+t+1)(x2+t+1)
-    y.arr[1] = y.x2 * t * 2 + y.x2 + 2 * t * t + t + 2*t + 1; //(x2+t+1)(2t+1)
-    y.arr[2] = y.x2y2 - y.x2y1 + y.x2 - y.y1 * t + y.y2 * t + t +y.y2 - y.y1 + 1; //(y2-y1+1)(x2+t+1)
-    y.arr[3] = -y.x2y1 + (t + 1) * y.x2 + (t + 1 - y.y1) * (t+1); //(t+1-y1)(x2+t+1)
-    y.arr[4] = (2*t+1) * (y.y2+t+1); //(2t+1)(y2+t+1)
-    y.arr[5] = 4 * t * t + 4 * t + 1; //(2t+1)(2t+1)
-    y.arr[6] = y.y2 * t * 2 - y.y1 * t * 2 + y.y2 - y.y1; //(y2-y1+1)(2t+1)
-    y.arr[7] = (t + 1 - y.y1) * (2 * t + 1); //(t+1-y1)(2t+1)
-    y.arr[8] = y.x2y2 - y.x1y2 + y.x2 * t - y.x1 * t; //(y2+t+1)(x2-x1+1)
-    y.arr[9] = y.x2 * t * 2 - y.x1 * t * 2 + y.x2 - y.x1; //(2t+1)(x2-x1+1)
-    y.arr[10] = y.x2y2 + y.x1y1 - y.x1y2 - y.x2y1; //(y2-y1+1)(x2-x1+1)
-    y.arr[11] = -y.x2y1 + y.x1y1 + (t + 1) * (y.x2 - y.x1); //(t + 1 -y1)(x2-x1+1)
-    y.arr[12] = -y.x1y2 - y.x1 * t + (t + 1) * (y.y2 + t); //(y2+t+1)(t+1-x1)
-    y.arr[13] = (2 * t + 1) * (t + 1 - y.x1); //(2t+1)(t+1-x1)
-    y.arr[14] = -y.x1y2 + y.x1y1 + (t + 1) * (y.y2 - y.y1); //(y2-y1+1)(t + 1-x1)
-    y.arr[15] = y.x1y1 - (t + 1) * y.y1 - (t + 1) * y.x1 + (t + 1) * (t + 1); //(t+1 - y1)(t+1-x1)  
+    y.arr[0] = n*t*t+t*y.x2+t*y.y2+2*n*t+y.x2y2+y.x2+y.y2+n;
+    //(y2+t+1)(x2+t+1)
+    y.arr[1] = 2*n*t*t+2*t*y.x2+3*t*n+y.x2+n;
+    //(x2+t+1)(2t+1)
+    y.arr[2] = -t*y.y1+t*y.y2+n*t-y.x2y1+y.x2y2+y.x2-y.y1+y.y2+n; 
+    //(y2-y1+1)(x2+t+1)
+    y.arr[3] = n*t*t+t*y.x2-t*y.y1+2*n*t-y.x2y1+y.x2-y.y1+n;
+    //(t+1-y1)(x2+t+1)
+    y.arr[4] = 2*n*t*t + 2*t*y.y2 + 3*n*t +y.y2 + n;
+    //(2t+1)(y2+t+1)
+    y.arr[5] = 4*n*t*t + 4*n*t + n;
+    //(2t+1)(2t+1)
+    y.arr[6] = -2*t*y.y1 + 2*t*y.y2 + 2*n*t - y.y1 + y.y2 + n; 
+    //(y2-y1+1)(2t+1)
+    y.arr[7] = 2*n*t*t - 2*t*y.y1 + 3*n*t - y.y1 + n; 
+    //(t+1-y1)(2t+1)
+    y.arr[8] = -t*y.x1 + t*y.x2 + n*t - y.x1y2 + y.x2y2 - y.x1 + y.x2 + y.y2 + n;//(y2+t+1)(x2-x1+1)
+    y.arr[9] = -2*t*y.x1 + 2*t*y.x2 + 2*n*t - y.x1 + y.x2 + n; //(2t+1)(x2-x1+1)
+    y.arr[10] = y.x1y1-y.x1y2-y.x2y1 + y.x2y2 - y.x1 + y.x2 - y.y1 + y.y2 + n; //(y2-y1+1)(x2-x1+1)
+    y.arr[11] = -t*y.x1 + t*y.x2 + n*t + y.x1y1 - y.x2y1 - y.x1 + y.x2 - y.y1 + n; //(t + 1 -y1)(x2-x1+1)
+    y.arr[12] = n*t*t - t*y.x1 + t*y.y2 + n*t - y.x1y2 - y.x1 + y.y2 + n; //(y2+t+1)(t+1-x1)
+    y.arr[13] = 2*n*t*t - 2*t*y.x1 + 3*n*t - y.x1 + n; //(2t+1)(t+1-x1)
+    y.arr[14] = -t*y.y1 + y.x1y1 - y.y1 + t*y.y2 - y.x1y2 + y.y2 + n*t - y.x1 + n; //(y2-y1+1)(t + 1-x1)
+    y.arr[15] = n*t*t - t*y.x1 - t*y.y1 + 2*n*t + y.x1y1 - y.x1 - y.y1 + n; //(t+1 - y1)(t+1-x1)  
     return y;
 }
 y1node nodeinit(y1node x1)
