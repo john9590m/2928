@@ -5,7 +5,8 @@
 using namespace std;
 
 struct y2node{
-    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0,n=0;
+    long long x1=0,x2=0,y1=0,y2=0,x1y1=0,x1y2=0,x2y1=0,x2y2=0;
+    int n=0;
     long long arr[16];
     bool operator< (const y2node &a) const
     {
@@ -28,7 +29,8 @@ struct y2node{
 };
 
 struct y1node{
-    long long n=0,y1=0;
+    long long y1=0;
+    int n=0;
     long long arr[16];
     vector<y2node> seg;
     bool operator< (const y1node &a) const
@@ -46,7 +48,8 @@ struct y1node{
 };
 
 struct x2node{
-    long long n=0,x2=0;
+    long long x2=0;
+    int n=0;
     long long arr[16];
     vector<y1node> seg;
     bool operator< (const x2node &a) const
@@ -84,7 +87,8 @@ struct x1node{
 
 vector<x1node> seg,ar;
 long long arr[16];
-long long n,m,t=-1;
+long long m,t=-1;
+int n;
 
 y2node y2seginit(vector<y2node> &seg, vector<y2node> ar, int node, int start, int end);
 y1node y1seginit(vector<y1node> &seg, vector<y1node> ar, int node, int start, int end);
