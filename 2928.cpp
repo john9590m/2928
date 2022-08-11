@@ -238,6 +238,7 @@ x1node seginit(int node, int start, int end)
 void init()
 {
     sort(ar.begin(),ar.end());
+    seg.resize(2*n);
     seginit(1,0,n-1);
     ar.clear();
 }
@@ -287,10 +288,12 @@ y1node nodeinit(y1node x1)
     int pow = 1;
     for (m=0;x1.n>pow;m++) pow*=2;
     int a,b;
-    if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow];
-    else a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n];
-    if (x1.seg[2*x1.n-1]<tp) b = lower_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
-    else b = lower_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    if (x1.seg[pow - 1] < tm) a = x1.n - 1;
+    else if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n];
+    else a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow];
+    if (x1.seg[pow - 1] < tp) b = x1.n - 1;
+    else if (x1.seg[2*x1.n-1]<tp) b = lower_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    else b = lower_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<8;j++) r.arr[2*j]=r1.arr[2*j];
     b++;
@@ -314,10 +317,12 @@ x2node nodeinit(x2node x1)
     int pow = 1;
     for (m=0;x1.n>pow;m++) pow*=2;
     int a,b;
-    if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow] - 1;
-    else a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n] - 1;
-    if (x1.seg[2*x1.n-1].y1<=tp.y1) b = upper_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
-    else b = upper_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    if (x1.seg[pow - 1] < tm) a = x1.n - 1;
+    else if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n] - 1;
+    else a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow] - 1;
+    if (x1.seg[pow - 1].y1 <= tp.y1) b = x1.n - 1;
+    else if (x1.seg[2*x1.n-1].y1<=tp.y1) b = upper_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    else b = upper_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
     if (x1.n>0 && a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
     a++;
@@ -341,10 +346,12 @@ x1node nodeinit(x1node x1)
     int a,b;
     int pow = 1;
     for (m=0;x1.n>pow;m++) pow*=2;
-    if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow];
-    else a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n];
-    if (x1.seg[2*x1.n-1]<tp) b = lower_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
-    else b = lower_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    if (x1.seg[pow - 1] < tm) a = x1.n - 1;
+    else if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n];
+    else a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow];
+    if (x1.seg[pow - 1] < tp) b = x1.n - 1;
+    else if (x1.seg[2*x1.n-1]<tp) b = lower_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
+    else b = lower_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
     if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
     for (int j=0;j<2;j++) for (int i=0;i<4;i++) r.arr[8*j+i]=r1.arr[8*j+i];
     b++;
@@ -419,10 +426,12 @@ long long result()
     int m=0;
     int pow = 1;
     for (m=0;n>pow;m++) pow*=2;
-    if (seg[2*n-1]<tm) a = lower_bound(&seg[pow], &seg[2*n-1],tm) - &seg[pow] - 1;
-    else a = lower_bound(&seg[n], &seg[pow - 1],tm) - &seg[pow-n] - 1;
-    if (seg[2*n-1].x1<=tp.x1) b = upper_bound(&seg[pow],&seg[2*n-1],tp) - &seg[pow] - 1;
-    else b = upper_bound(&seg[n],&seg[pow - 1],tp) - &seg[pow-n] - 1;
+    if (seg[pow-1]<tm) a = n-1;
+    else if (seg[2*n-1]<tm) a = lower_bound(&seg[n], &seg[pow - 1],tm) - &seg[pow-n] - 1;
+    else a = lower_bound(&seg[pow], &seg[2*n-1],tm) - &seg[pow] - 1;
+    if (seg[pow-1].x1 <= tp.x1) b = n-1;
+    else if (seg[2*n-1].x1<=tp.x1) b = upper_bound(&seg[n],&seg[pow - 1],tp) - &seg[pow-n] - 1;
+    else b = upper_bound(&seg[pow],&seg[2*n-1],tp) - &seg[pow] - 1;
     long long r=0;
     if (n>0&&a>=0) r1=query(1,0,n-1,0,a);
     for (int i=0;i<8;i++) r+=r1.arr[i];
