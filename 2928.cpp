@@ -12,20 +12,6 @@ struct y2node{
     {
         return y2<a.y2;
     }
-    y2node& operator= (const y2node &a)
-    {
-        for (int i=0;i<16;i++) arr[i]=a.arr[i];
-        x1 = a.x1;
-        x2 = a.x2;
-        y1 = a.y1;
-        y2 = a.y2;
-        x1y1 = a.x1y1;
-        x2y1 = a.x2y1;
-        x1y2 = a.x1y2;
-        x2y2 = a.x2y2;
-        n = a.n;
-        return *this;
-    }
 };
 
 struct y1node{
@@ -36,14 +22,6 @@ struct y1node{
     bool operator< (const y1node &a) const
     {
         return y1<a.y1;
-    }
-    y1node& operator= (const y1node &a)
-    {
-        seg = a.seg;
-        for (int i=0;i<16;i++) arr[i]=a.arr[i];
-        n = a.n;
-        y1 = a.y1;
-        return *this;
     }
 };
 
@@ -56,14 +34,6 @@ struct x2node{
     {
         return x2<a.x2;
     }
-    x2node& operator= (const x2node &a)
-    {
-        seg = a.seg;
-        for (int i=0;i<16;i++) arr[i]=a.arr[i];
-        x2 = a.x2;
-        n = a.n;
-        return *this;
-    }
 };
 
 struct x1node{
@@ -73,14 +43,6 @@ struct x1node{
     bool operator< (const x1node &a) const
     {
         return x1<a.x1;
-    }
-    x1node& operator= (const x1node &a)
-    {
-        seg = a.seg;
-        for (int i=0;i<16;i++) arr[i]=a.arr[i]; 
-        x1 = a.x1;
-        n = a.n;
-        return *this;
     }
 };
 
@@ -209,28 +171,63 @@ void x1init(x1node &a,long long x1, long long x2,long long y1,long long y2)
 
 y2node y2seginit(vector<y2node> &seg, vector<y2node> ar, int node, int start, int end)
 {
-    if (start == end) return seg[node] = ar[start];
+    if (start == end)
+    {
+        for (int i=0;i<16;i++) seg[node].arr[i]=ar[start].arr[i]; 
+        seg[node].x1 = ar[start].x1;
+        seg[node].x2 = ar[start].x2;
+        seg[node].y1 = ar[start].y1;
+        seg[node].y2 = ar[start].y2;
+        seg[node].x1y1 = ar[start].x1y1;
+        seg[node].x2y1 = ar[start].x2y1;
+        seg[node].x1y2 = ar[start].x1y2;
+        seg[node].x2y2 = ar[start].x2y2;
+        seg[node].n = ar[start].n;
+        seg[node].n = ar[start].n;
+        return seg[node];
+    }
     int mid = (start + end) / 2;
     return seg[node] = combine(y2seginit(seg,ar,node*2,start,mid),y2seginit(seg,ar,node*2+1,mid+1,end));
 }
 
 y1node y1seginit(vector<y1node> &seg, vector<y1node> ar, int node, int start, int end)
 {
-    if (start == end) return seg[node] = ar[start];
+    if (start == end)
+    {
+        seg[node].seg = ar[start].seg;
+        for (int i=0;i<16;i++) seg[node].arr[i]=ar[start].arr[i]; 
+        seg[node].y1 = ar[start].y1;
+        seg[node].n = ar[start].n;
+        return seg[node];
+    }
     int mid = (start + end) / 2;
     return seg[node] = combine(y1seginit(seg,ar,node*2,start,mid),y1seginit(seg,ar,node*2+1,mid+1,end));
 }
 
 x2node x2seginit(vector<x2node> &seg, vector<x2node> ar, int node, int start, int end)
 {
-    if (start == end) return seg[node] = ar[start];
+    if (start == end)      
+    {
+        seg[node].seg = ar[start].seg;
+        for (int i=0;i<16;i++) seg[node].arr[i]=ar[start].arr[i]; 
+        seg[node].x2 = ar[start].x2;
+        seg[node].n = ar[start].n;
+        return seg[node];
+    }
     int mid = (start + end) / 2;
     return seg[node] = combine(x2seginit(seg,ar,node*2,start,mid),x2seginit(seg,ar,node*2+1,mid+1,end));
 }
 
 x1node seginit(int node, int start, int end)
 {
-     if (start == end) return seg[node] = ar[start];
+     if (start == end)
+     {
+        seg[node].seg = ar[start].seg;
+        for (int i=0;i<16;i++) seg[node].arr[i]=ar[start].arr[i]; 
+        seg[node].x1 = ar[start].x1;
+        seg[node].n = ar[start].n;
+        return seg[node];
+     }
     int mid = (start + end) / 2;
     return seg[node] = combine(seginit(node*2,start,mid),seginit(node*2+1,mid+1,end));
 }
