@@ -87,7 +87,7 @@ y1node combine (y1node a,y1node b)
         for (int i=0;i<b.n;i++) ar.push_back(b.seg[b.n+i]);
         r.n = a.n+b.n;
         sort(ar.begin(),ar.end()); 
-        r.seg.resize(2*r.n);
+        r.seg.resize(4*r.n);
         if (r.n>0) y2seginit(r.seg,ar,1,0,r.n-1);
         ar.clear();
     }
@@ -105,7 +105,7 @@ x2node combine (x2node a,x2node b)
         for (int i=0;i<b.n;i++) ar.push_back(b.seg[b.n+i]);
         r.n = a.n+b.n;
         sort(ar.begin(),ar.end()); 
-        r.seg.resize(2*r.n);
+        r.seg.resize(4*r.n);
         if (r.n>0) y1seginit(r.seg,ar,1,0,r.n-1);
         ar.clear();
     }
@@ -123,7 +123,7 @@ x1node combine (x1node a,x1node b)
         for (int i=0;i<b.n;i++) ar.push_back(b.seg[b.n+i]);
         r.n = a.n+b.n;
         sort(ar.begin(),ar.end()); 
-        r.seg.resize(2*r.n);
+        r.seg.resize(4*r.n);
         if (r.n>0) x2seginit(r.seg,ar,1,0,r.n-1);
         ar.clear();
     }
@@ -235,7 +235,7 @@ x1node seginit(int node, int start, int end)
 void init()
 {
     sort(ar.begin(),ar.end());
-    seg.resize(2*n);
+    seg.resize(4*n);
     seginit(1,0,n-1);
     ar.clear();
 }
@@ -280,6 +280,7 @@ y1node nodeinit(y1node x1)
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
+    if (x1.n == 0) return r;
     tm.y2 = -t;
     tp.y2 = t;
     int pow = 1;
@@ -319,6 +320,7 @@ x2node nodeinit(x2node x1)
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
+    if (x1.n == 0) return r;
     tm.y1 = -t;
     tp.y1 = t;
     int pow = 1;
@@ -358,6 +360,7 @@ x1node nodeinit(x1node x1)
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
+    if (x1.n == 0) return r;
     tm.x2 = -t;
     tp.x2 = t;
     int a,b;
