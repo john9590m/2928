@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -235,9 +236,15 @@ x1node seginit(int node, int start, int end)
 void init()
 {
     sort(ar.begin(),ar.end());
-    seg.resize(4*n);
-    seginit(1,0,n-1);
-    ar.clear();
+    seg.resize(2*n);
+    int pow = 1;
+    for (int i=0;n>pow;i++)pow *=2;
+    for (int i=0;i<n;i++) seg[n+i] = ar[n];
+    for (int i=n-1; i>=0;i--)
+    { 
+        if (2*i+1<=2*n-1) seg[i] = combine(seg[2*i],seg[2*i+1]);
+        else seg[i] = seg[2*i];
+    }
 }
 
 y2node nodeinit(y2node y)
@@ -484,6 +491,7 @@ int main(void)
 {
     cin >> n;
     x1node *a;
+    clock_t start = clock();
     long long x1,x2,y1,y2;
     for (int i=0;i<n;i++)
     {
@@ -494,7 +502,7 @@ int main(void)
         for (int i=0; i<16; i++)  a->arr[i] = 0;
         x1init(*a,x1,x2,y1,y2);
         ar.push_back(*a);
-    }
+    } 
     init(); 
     cin >> m;
     for (int i=0;i<m;i++)
