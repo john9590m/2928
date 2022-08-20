@@ -238,8 +238,10 @@ void init()
     sort(ar.begin(),ar.end());
     seg.resize(2*n);
     int pow = 1;
-    for (int i=0;n>pow;i++)pow *=2;
-    for (int i=0;i<n;i++) seg[n+i] = ar[n];
+    for (int i=0;n>pow;i++) pow *=2;
+    int i;
+    for (i=0;pow+i<2*n;i++) seg[pow+i] = ar[i];
+    for (int j=0;i+j<n;j++) seg[n+j] = ar[i+j];
     for (int i=n-1; i>=0;i--)
     { 
         if (2*i+1<=2*n-1) seg[i] = combine(seg[2*i],seg[2*i+1]);
