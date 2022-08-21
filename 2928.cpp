@@ -126,43 +126,12 @@ void init1()
     }
 }
 
-x2node nodeinit(x2node x1)
+x2node nodeinit(x2node r)
 {
-    x2node r;
-    y1node r1,r2,tm,tp;
-    for (int i=0;i<16;i++)
-    {
-        r.arr[i] = 0;
-        r1.arr[i]=0;
-        r2.arr[i]=0;
-    }
-    if (x1.n == 0) return r;
-    tm.y1 = -t;
-    tp.y1 = t;
-    int pow = 1;
-    for (int m=0;x1.n>pow;m++) pow*=2;
-    int a,b;
-    if(x1.n == pow) 
-    {
-        if (x1.seg[2*x1.n-1] < tm) a = x1.n - 1;
-        else a = lower_bound(&x1.seg[x1.n],&x1.seg[2*x1.n-1],tm) - &x1.seg[x1.n] - 1;
-        if (x1.seg[2*x1.n-1].y1 <=tp.y1) b = x1.n - 1;
-        else b = upper_bound(&x1.seg[x1.n],&x1.seg[2*x1.n-1],tp) - &x1.seg[x1.n] - 1;
-    }
-    else
-    {
-        if (x1.seg[pow - 1] < tm) a = x1.n - 1;
-        else if (x1.seg[2*x1.n-1]<tm) a = lower_bound(&x1.seg[x1.n], &x1.seg[pow - 1],tm) - &x1.seg[pow-x1.n] - 1;
-        else a = lower_bound(&x1.seg[pow], &x1.seg[2*x1.n-1],tm) - &x1.seg[pow] - 1;
-        if (x1.seg[pow - 1].y1 <= tp.y1) b = x1.n - 1;
-        else if (x1.seg[2*x1.n-1].y1<=tp.y1) b = upper_bound(&x1.seg[x1.n],&x1.seg[pow - 1],tp) - &x1.seg[pow-x1.n] - 1;
-        else b = upper_bound(&x1.seg[pow],&x1.seg[2*x1.n-1],tp) - &x1.seg[pow] - 1;
-    }
-    if (x1.n>0 && a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
-    a++;
-    if (x1.n>0 && b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
-    for (int j=0;j<4;j++) for (int i=0;i<2;i++) r.arr[4*j+i]=r1.arr[4*j+i];
-    for (int j=0;j<4;j++) for (int i=2;i<4;i++) r.arr[4*j+i]=r2.arr[4*j+i];
+    x1.arr[0] = 4*r.n*t*t + 4*r.n*t + r.n;
+    x1.arr[1] = 
+    x1.arr[2]
+    x1.arr[3]
     return r;
 }
 
@@ -287,6 +256,13 @@ int main(void)
         delete a;
         a = new x1node();
         x1init(*a,x2,y2);
+        ar.push_back(*a);
+        delete a;
+        x1init(*a,x1,y2);
+        ar1.push_back(*a);
+        delete a;
+        a = new x1node();
+        x1init(*a,x2,y1);
         ar1.push_back(*a);
         delete a;
     }
