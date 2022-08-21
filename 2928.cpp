@@ -49,6 +49,7 @@ void x1init(x1node &a,long long x,long long y)
     b.x=x;
     b.y=y;
     b.xy=x*y;
+    a.seg.resize(1);
     a.seg.push_back(b);
 }
 
@@ -56,25 +57,13 @@ void x1init(x1node &a,long long x,long long y)
 x2node combine (x2node a,x2node b)
 {
     x2node r;
-    vector<y1node> ar;
     for (int i=0;i<16;i++) r.arr[i]=a.arr[i]+b.arr[i];
     if (t==-1)
     {
-        for (int i=0;i<a.n;i++) ar.push_back(a.seg[a.n+i]);
-        for (int i=0;i<b.n;i++) ar.push_back(b.seg[b.n+i]);
-        r.n = a.n+b.n;
-        sort(ar.begin(),ar.end()); 
-        r.seg.resize(2*r.n);
-        int pow=1,i;
-        for (i=0;r.n>pow;i++) pow*=2;
-        for (i=0;pow+i<2*r.n;i++) r.seg[pow+i] = ar[i];
-        for (int j=0;i+j<r.n;j++) r.seg[r.n+j] = ar[i+j];
-        for (i=r.n-1;i>=0;i--)
-        {
-            if (2*i+1<=2*r.n-1) r.seg[i] = combine(r.seg[2*i],r.seg[2*i+1]);
-            else r.seg[i] = r.seg[2*i];
-        }
-        ar.clear();
+        r.n=a.n+b.n;
+        r.x=a.x+b.x;
+        r.y=a.y+b.y;
+        r.xy=a.xy+b.xy;
     }
     return r;
 }
@@ -121,6 +110,21 @@ void init()
     }
 }
 
+void init1()
+{
+    sort(ar1.begin(),ar1.end());
+    seg1.resize(2*n);
+    int pow = 1;
+    for (int i=0;n>pow;i++) pow *=2;
+    int i;
+    for (i=0;pow+i<2*n;i++) seg1[pow+i] = ar1[i];
+    for (int j=0;i+j<n;j++) seg1[n+j] = ar1[i+j];
+    for (i=n-1; i>=0;i--)
+    { 
+        if (2*i+1<=2*n-1) seg1[i] = combine(seg1[2*i],seg1[2*i+1]);
+        else seg1[i] = seg1[2*i];
+    }
+}
 
 x2node nodeinit(x2node x1)
 {
@@ -277,8 +281,6 @@ int main(void)
     {
         a = new x1node();
         cin >> x1 >> y1 >> x2 >> y2;
-        a->n=1;
-        a->x1 = x1;
         for (int i=0; i<16; i++)  a->arr[i] = 0;
         x1init(*a,x1,y1);
         ar.push_back(*a);
@@ -287,9 +289,9 @@ int main(void)
         x1init(*a,x2,y2);
         ar1.push_back(*a);
         delete a;
-
     }
     init();
+    init1();
     cin >> m;
     for (int i=0;i<m;i++)
     {
