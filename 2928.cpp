@@ -36,7 +36,7 @@ int n;
 long long zz=0;
 
 x2node query(vector<x2node> seg,int node, int start, int end, int left, int right);
-x1node query(int node, int start, int end, int left, int right);
+x1node query(vector<x1node> seg,int node, int start, int end, int left, int right);
 
 
 
@@ -44,6 +44,7 @@ void x1init(x1node &a,long long x,long long y)
 {
     x2node b;
     a.n=1;
+    a.x = x;
     for (int i =0; i<4; i++) b.arr[i]=0;
     b.n=1;
     b.x=x;
@@ -156,7 +157,7 @@ x1node nodeinit(x1node x1)
     {
         if (x1.seg[2*n-1] < tm) a = n - 1;
         else a = lower_bound(&x1.seg[n],&x1.seg[2*n-1],tm) - &x1.seg[n] - 1;
-        if (x1.seg[2*n-1].x <=tp.x) b = n - 1;
+        if (x1.seg[2*n-1].y <= tp.y) b = n - 1;
         else b = upper_bound(&x1.seg[n],&x1.seg[2*n-1],tp) - &x1.seg[n] - 1;
     }
     else
@@ -164,17 +165,17 @@ x1node nodeinit(x1node x1)
         if (x1.seg[pow-1]<tm) a = n-1;
         else if (x1.seg[2*n-1]<tm) a = lower_bound(&x1.seg[n], &x1.seg[pow - 1],tm) - &x1.seg[pow-n] - 1;
         else a = lower_bound(&x1.seg[pow], &x1.seg[2*n-1],tm) - &x1.seg[pow] - 1;
-        if (x1.seg[pow-1].x <= tp.x) b = n-1;
-        else if (x1.seg[2*n-1].x<=tp.x) b = upper_bound(&x1.seg[n],&x1.seg[pow - 1],tp) - &x1.seg[pow-n] - 1;
+        if (x1.seg[pow-1].y <= tp.y) b = n-1;
+        else if (x1.seg[2*n-1].y<=tp.y) b = upper_bound(&x1.seg[n],&x1.seg[pow - 1],tp) - &x1.seg[pow-n] - 1;
         else b = upper_bound(&x1.seg[pow],&x1.seg[2*n-1],tp) - &x1.seg[pow] - 1;
     }
-    if (x1.n>0 && b>=a) r1=query(x1.seg,1,0,x1.n-1,a,b);
-    b++;
-    if (x1.n>0&&x1.n-1>=b) r2=query(x1.seg,1,0,x1.n-1,b,x1.n-1);
+     if (x1.n>0&&a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
+    a++;
+    if (x1.n>0&&b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for(int i=0;i<4;i++)
     {
         if(i%2==0) r.arr[i] = r1.arr[i];
-        else r.arr[i] = r1.arr[i];
+        else r.arr[i] = r2.arr[i];
     }
     return r;
 }
@@ -193,7 +194,7 @@ x2node query(vector<x2node> seg,int node, int start, int end, int left, int righ
     return combine(query(seg,node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
 }
 
-x1node query(int node, int start, int end, int left, int right)
+x1node query(vector<x1node> seg,int node, int start, int end, int left, int right)
 {
     x1node I;
     if (left > end || right < start) 
@@ -203,7 +204,7 @@ x1node query(int node, int start, int end, int left, int right)
     }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
-    return combine(query(node*2,start,mid,left,right),query(node*2+1,mid+1,end,left,right));
+    return combine(query(seg, node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
 }
 
 long long result(vector<x1node> &seg)
@@ -224,7 +225,7 @@ long long result(vector<x1node> &seg)
     {
         if (seg[2*n-1] < tm) a = n - 1;
         else a = lower_bound(&seg[n],&seg[2*n-1],tm) - &seg[n] - 1;
-        if (seg[2*n-1].x <=tp.x) b = n - 1;
+        if (seg[2*n-1].x <= tp.x) b = n - 1;
         else b = upper_bound(&seg[n],&seg[2*n-1],tp) - &seg[n] - 1;
     }
     else
@@ -232,13 +233,13 @@ long long result(vector<x1node> &seg)
         if (seg[pow-1]<tm) a = n-1;
         else if (seg[2*n-1]<tm) a = lower_bound(&seg[n], &seg[pow - 1],tm) - &seg[pow-n] - 1;
         else a = lower_bound(&seg[pow], &seg[2*n-1],tm) - &seg[pow] - 1;
-        if (seg[pow-1].x <= tp.x) b = n-1;
-        else if (seg[2*n-1].x<=tp.x) b = upper_bound(&seg[n],&seg[pow - 1],tp) - &seg[pow-n] - 1;
+        if (seg[pow-1].x > tp.x) b = n-1;
+        else if (seg[2*n-1].x <=tp.x) b = upper_bound(&seg[n],&seg[pow - 1],tp) - &seg[pow-n] - 1;
         else b = upper_bound(&seg[pow],&seg[2*n-1],tp) - &seg[pow] - 1;
     }
-    if (n>0&&a>=0) r1=query(1,0,n-1,0,a);
+    if (n>0&&a>=0) r1=query(seg,1,0,n-1,0,a);
     a++;
-    if (n>0&&b>=a) r2=query(1,0,n-1,a,b);
+    if (n>0&&b>=a) r2=query(seg,1,0,n-1,a,b);
     for (int i=0;i<1;i++) r += r1.arr[i];
     for (int i=2;i<4;i++) r += r2.arr[i];
     return r;
@@ -255,6 +256,8 @@ int main(void)
         a = new x1node();
         cin >> x1 >> y1 >> x2 >> y2;
         for (int i=0; i<4; i++)  a->arr[i] = 0;
+        x2++;
+        y2++;
         x1init(*a,x1,y1);
         ar.push_back(*a);
         a = new x1node();
