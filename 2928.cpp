@@ -85,8 +85,8 @@ x1node combine (x1node a,x1node b)
     for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
     if (t==-1)
     {
-        for (int i=0;i<a.n;i++) r.ar.push_back(a.seg[a.n+i]);
-        for (int i=0;i<b.n;i++) r.ar.push_back(b.seg[b.n+i]);
+        r.ar = a.ar;
+        for (x2node i : b.ar) r.ar.push_back(i);
         r.n = a.n+b.n;
         sort(r.ar.begin(),r.ar.end()); 
         r.seg.resize(2*(r.n+1));
@@ -197,7 +197,7 @@ long long result(vector<x1node> &seg,vector<x1node> &ar)
     if (n>0&&a>=0) r1=query(seg,1,0,n-1,0,a);
     a++;
     if (n>0&&b>=a) r2=query(seg,1,0,n-1,a,b);
-    for (int i=0;i<1;i++) r += r1.arr[i];
+    for (int i=0;i<2;i++) r += r1.arr[i];
     for (int i=2;i<4;i++) r += r2.arr[i];
     return r;
 }
@@ -220,6 +220,7 @@ int main(void)
         a = new x1node();
         x1init(*a,x2,y2);
         ar.push_back(*a);
+        a = new x1node();
         x1init(*a,x1,y2);
         ar1.push_back(*a);
         a = new x1node();
