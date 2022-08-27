@@ -38,7 +38,9 @@ long long zz=0;
 x2node query(vector<x2node> seg,int node, int start, int end, int left, int right);
 x1node query(vector<x1node> seg,int node, int start, int end, int left, int right);
 x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end);
-x1node x1nodeinit(vector<x1node> &seg,vector<x1node> &ar, int node, int start, int end);
+x1node x1nodeinit1(int node, int start, int end);
+x1node x1nodeinit2(int node, int start, int end);
+
 
 
 
@@ -89,24 +91,25 @@ x1node combine (x1node a,x1node b)
         for (x2node i : b.ar) r.ar.push_back(i);
         r.n = a.n+b.n;
         sort(r.ar.begin(),r.ar.end()); 
-        r.seg.resize(2*(r.n+1));
+        r.seg.resize(2*(r.n+2));
         x2nodeinit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
 }
 
-x1node x1nodeinit(vector<x1node> &seg,vector<x1node> &ar, int node, int start, int end)
+x1node x1nodeinit1(int node, int start, int end)
 {
     if(start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(x1nodeinit(seg,ar,node*2,start,mid),x1nodeinit(seg,ar,node*2+1,mid+1,end));
+    return seg[node] = combine(x1nodeinit1(node*2,start,mid),x1nodeinit1(node*2+1,mid+1,end));
 }
 
-void init(vector<x1node> &seg,vector<x1node> &ar,int n)
+
+x1node x1nodeinit2(int node, int start, int end)
 {
-    sort(ar.begin(),ar.end());
-    seg.resize(2*(n+1));
-    x1nodeinit(seg,ar,1,0,n-1);
+    if(start == end) return seg1[node] = ar1[start];
+    int mid = (start + end) / 2;
+    return seg1[node] = combine(x1nodeinit1(node*2,start,mid),x1nodeinit1(node*2+1,mid+1,end));
 }
 
 x2node nodeinit(x2node r)
@@ -228,8 +231,12 @@ int main(void)
         ar1.push_back(*a);
     }
     n*=2;
-    init(seg,ar,n);
-    init(seg1,ar1,n);
+    sort(ar.begin(),ar.end());
+    seg.resize(2*(n+1));
+    x1nodeinit1(1,0,n-1);
+    sort(ar1.begin(),ar1.end());
+    seg1.resize(2*(n+1));
+    x1nodeinit2(1,0,n-1);
     cin >> m;
     for (int i=0;i<m;i++)
     {
