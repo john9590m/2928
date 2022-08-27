@@ -52,6 +52,7 @@ void x1init(x1node &a,long long x,long long y)
     b.x=x;
     b.y=y;
     b.xy=x*y;
+    a.ar.push_back(b);
     a.seg.resize(1);
     a.seg.push_back(b);
 }
@@ -88,7 +89,7 @@ x1node combine (x1node a,x1node b)
         for (int i=0;i<b.n;i++) r.ar.push_back(b.seg[b.n+i]);
         r.n = a.n+b.n;
         sort(r.ar.begin(),r.ar.end()); 
-        r.seg.resize(2*r.n);
+        r.seg.resize(2*(r.n+1));
         x2nodeinit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
@@ -132,8 +133,6 @@ x1node nodeinit(x1node x1)
     tm.y = -t;
     tp.y = t;
     int a,b;
-    int pow = 1;
-    for (int m=0;x1.n>pow;m++) pow*=2;
     if (x1.ar[n-1] < tm) a = n - 1;
     else a = lower_bound(&x1.ar[0],&x1.ar[n-1],tm) - &x1.ar[0] - 1;
     if (x1.ar[n-1].y <= tp.y) b = n - 1;
