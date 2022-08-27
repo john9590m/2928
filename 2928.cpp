@@ -91,7 +91,7 @@ x1node combine (x1node a,x1node b)
         for (x2node i : b.ar) r.ar.push_back(i);
         r.n = a.n+b.n;
         sort(r.ar.begin(),r.ar.end()); 
-        r.seg.resize(2*(r.n+2));
+        r.seg.resize(4*r.n);
         x2nodeinit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
@@ -207,6 +207,9 @@ long long result(vector<x1node> &seg,vector<x1node> &ar)
 
 int main(void)
 {
+    ios_base :: sync_with_stdio(false); 
+    cin.tie(NULL); 
+    cout.tie(NULL);
     cin >> n;
     x1node *a;
     clock_t start = clock();
@@ -232,10 +235,10 @@ int main(void)
     }
     n*=2;
     sort(ar.begin(),ar.end());
-    seg.resize(2*(n+1));
+    seg.resize(4*n);
     x1nodeinit1(1,0,n-1);
     sort(ar1.begin(),ar1.end());
-    seg1.resize(2*(n+1));
+    seg1.resize(4*n);
     x1nodeinit2(1,0,n-1);
     cin >> m;
     for (int i=0;i<m;i++)
