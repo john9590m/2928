@@ -20,7 +20,7 @@ struct x2node{
 struct x1node{
     long long x=0,n=0;
     long long arr[4];
-    vector<x2node> seg;
+    vector<x2node> seg,ar;
     bool operator< (const x1node &a) const
     {
         return x<a.x;
@@ -37,6 +37,8 @@ long long zz=0;
 
 x2node query(vector<x2node> seg,int node, int start, int end, int left, int right);
 x1node query(vector<x1node> seg,int node, int start, int end, int left, int right);
+x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end);
+x1node x1nodeinit(vector<x1node> &seg,vector<x1node> &ar, int node, int start, int end);
 
 
 
@@ -69,63 +71,42 @@ x2node combine (x2node a,x2node b)
     return r;
 }
 
+x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end)
+{
+    if(start == end) return seg[node] = ar[start];
+    int mid = (start + end) / 2;
+    return seg[node] = combine(x2nodeinit(seg,ar,node*2,start,mid),x2nodeinit(seg,ar,node*2+1,mid+1,end));
+}
+
 x1node combine (x1node a,x1node b)
 {
     x1node r;
-    vector<x2node> ar;
     for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
     if (t==-1)
     {
-        for (int i=0;i<a.n;i++) ar.push_back(a.seg[a.n+i]);
-        for (int i=0;i<b.n;i++) ar.push_back(b.seg[b.n+i]);
+        for (int i=0;i<a.n;i++) r.ar.push_back(a.seg[a.n+i]);
+        for (int i=0;i<b.n;i++) r.ar.push_back(b.seg[b.n+i]);
         r.n = a.n+b.n;
-        sort(ar.begin(),ar.end()); 
+        sort(r.ar.begin(),r.ar.end()); 
         r.seg.resize(2*r.n);
-        int pow=1,i;
-        for (i=0;r.n>pow;i++) pow*=2;
-        for (i=0;pow+i<2*r.n;i++) r.seg[pow+i] = ar[i];
-        for (int j=0;i+j<r.n;j++) r.seg[r.n+j] = ar[i+j];
-        for (i=r.n-1;i>=0;i--)
-        {
-            if (2*i+1<=2*r.n-1) r.seg[i] = combine(r.seg[2*i],r.seg[2*i+1]);
-            else r.seg[i] = r.seg[2*i];
-        }
-        ar.clear();
+        x2nodeinit(r.seg,r.ar,1,0,r.n-1);
     }
     return r;
+}
+
+x1node x1nodeinit(vector<x1node> &seg,vector<x1node> &ar, int node, int start, int end)
+{
+    if(start == end) return seg[node] = ar[start];
+    int mid = (start + end) / 2;
+    return seg[node] = combine(x1nodeinit(seg,ar,node*2,start,mid),x1nodeinit(seg,ar,node*2+1,mid+1,end));
 }
 
 void init(vector<x1node> &seg,vector<x1node> &ar,int n)
 {
     sort(ar.begin(),ar.end());
-    seg.resize(2*n);
-    int pow = 1;
-    for (int i=0;n>pow;i++) pow *=2;
-    int i;
-    for (i=0;pow+i<2*n;i++) seg[pow+i] = ar[i];
-    for (int j=0;i+j<n;j++) seg[n+j] = ar[i+j];
-    for (i=n-1; i>=0;i--)
-    { 
-        if (2*i+1<=2*n-1) seg[i] = combine(seg[2*i],seg[2*i+1]);
-        else seg[i] = seg[2*i];
-    }
+    seg.resize(2*(n+1));
+    x1nodeinit(seg,ar,1,0,n-1);
 }
-
-/*void init1()
-{
-    sort(ar1.begin(),ar1.end());
-    seg1.resize(2*n);
-    int pow = 1;
-    for (int i=0;n>pow;i++) pow *=2;
-    int i;
-    for (i=0;pow+i<2*n;i++) seg1[pow+i] = ar1[i];
-    for (int j=0;i+j<n;j++) seg1[n+j] = ar1[i+j];
-    for (i=n-1; i>=0;i--)
-    { 
-        if (2*i+1<=2*n-1) seg1[i] = combine(seg1[2*i],seg1[2*i+1]);
-        else seg1[i] = seg1[2*i];
-    }
-}*/
 
 x2node nodeinit(x2node r)
 {
@@ -153,23 +134,12 @@ x1node nodeinit(x1node x1)
     int a,b;
     int pow = 1;
     for (int m=0;x1.n>pow;m++) pow*=2;
-    if(n == pow) 
-    {
-        if (x1.seg[2*n-1] < tm) a = n - 1;
-        else a = lower_bound(&x1.seg[n],&x1.seg[2*n-1],tm) - &x1.seg[n] - 1;
-        if (x1.seg[2*n-1].y <= tp.y) b = n - 1;
-        else b = upper_bound(&x1.seg[n],&x1.seg[2*n-1],tp) - &x1.seg[n] - 1;
-    }
-    else
-    {
-        if (x1.seg[pow-1]<tm) a = n-1;
-        else if (x1.seg[2*n-1]<tm) a = lower_bound(&x1.seg[n], &x1.seg[pow - 1],tm) - &x1.seg[pow-n] - 1;
-        else a = lower_bound(&x1.seg[pow], &x1.seg[2*n-1],tm) - &x1.seg[pow] - 1;
-        if (x1.seg[pow-1].y <= tp.y) b = n-1;
-        else if (x1.seg[2*n-1].y<=tp.y) b = upper_bound(&x1.seg[n],&x1.seg[pow - 1],tp) - &x1.seg[pow-n] - 1;
-        else b = upper_bound(&x1.seg[pow],&x1.seg[2*n-1],tp) - &x1.seg[pow] - 1;
-    }
-     if (x1.n>0&&a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
+    if (x1.ar[n-1] < tm) a = n - 1;
+    else a = lower_bound(&x1.ar[0],&x1.ar[n-1],tm) - &x1.ar[0] - 1;
+    if (x1.ar[n-1].y <= tp.y) b = n - 1;
+    else b = upper_bound(&x1.ar[0],&x1.ar[n-1],tp) - &x1.ar[0] - 1;
+
+    if (x1.n>0&&a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     a++;
     if (x1.n>0&&b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
     for(int i=0;i<4;i++)
@@ -207,7 +177,7 @@ x1node query(vector<x1node> seg,int node, int start, int end, int left, int righ
     return combine(query(seg, node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
 }
 
-long long result(vector<x1node> &seg)
+long long result(vector<x1node> &seg,vector<x1node> &ar)
 {
     x1node r1,r2,tm,tp;
     int a,b;
@@ -221,22 +191,10 @@ long long result(vector<x1node> &seg)
     int pow = 1;
     for (int m=0;n>pow;m++) pow*=2;
     long long r=0;
-    if(n == pow) 
-    {
-        if (seg[2*n-1] < tm) a = n - 1;
-        else a = lower_bound(&seg[n],&seg[2*n-1],tm) - &seg[n] - 1;
-        if (seg[2*n-1].x <= tp.x) b = n - 1;
-        else b = upper_bound(&seg[n],&seg[2*n-1],tp) - &seg[n] - 1;
-    }
-    else
-    {
-        if (seg[pow-1]<tm) a = n-1;
-        else if (seg[2*n-1]<tm) a = lower_bound(&seg[n], &seg[pow - 1],tm) - &seg[pow-n] - 1;
-        else a = lower_bound(&seg[pow], &seg[2*n-1],tm) - &seg[pow] - 1;
-        if (seg[pow-1].x > tp.x) b = n-1;
-        else if (seg[2*n-1].x <=tp.x) b = upper_bound(&seg[n],&seg[pow - 1],tp) - &seg[pow-n] - 1;
-        else b = upper_bound(&seg[pow],&seg[2*n-1],tp) - &seg[pow] - 1;
-    }
+    if (ar[n-1] < tm) a = n - 1;
+    else a = lower_bound(&ar[0],&ar[n-1],tm) - &ar[0] - 1;
+    if (ar[n-1].x <= tp.x) b = n - 1;
+    else b = upper_bound(&ar[0],&ar[n-1],tp) - &ar[0] - 1;
     if (n>0&&a>=0) r1=query(seg,1,0,n-1,0,a);
     a++;
     if (n>0&&b>=a) r2=query(seg,1,0,n-1,a,b);
@@ -276,6 +234,6 @@ int main(void)
     for (int i=0;i<m;i++)
     {
         cin >> t;
-        cout << result(seg) - result(seg1) << endl;
+        cout << result(seg,ar) - result(seg1,ar1) << endl;
     }
 }
