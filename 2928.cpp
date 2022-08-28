@@ -35,8 +35,8 @@ int n;
 
 long long zz=0;
 
-x2node query(vector<x2node> seg,int node, int start, int end, int left, int right);
-x1node query(vector<x1node> seg,int node, int start, int end, int left, int right);
+x2node query(vector<x2node> &seg,int node, int start, int end, int left, int right);
+x1node query(vector<x1node> &seg,int node, int start, int end, int left, int right);
 x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end);
 x1node x1nodeinit1(int node, int start, int end);
 x1node x1nodeinit2(int node, int start, int end);
@@ -60,7 +60,7 @@ void x1init(x1node &a,long long x,long long y)
 }
 
 
-x2node combine (x2node a,x2node b)
+x2node combine (x2node &a,x2node &b)
 {
     x2node r;
     for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
@@ -78,10 +78,12 @@ x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, i
 {
     if(start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(x2nodeinit(seg,ar,node*2,start,mid),x2nodeinit(seg,ar,node*2+1,mid+1,end));
+    x2node a = x2nodeinit(seg,ar,node*2,start,mid);
+    x2node b = x2nodeinit(seg,ar,node*2+1,mid+1,end);
+    return seg[node] = combine(a,b);
 }
 
-x1node combine (x1node a,x1node b)
+x1node combine (x1node &a,x1node &b)
 {
     x1node r;
     for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
@@ -101,7 +103,9 @@ x1node x1nodeinit1(int node, int start, int end)
 {
     if(start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    return seg[node] = combine(x1nodeinit1(node*2,start,mid),x1nodeinit1(node*2+1,mid+1,end));
+    x1node a =x1nodeinit1(node*2,start,mid);
+    x1node b = x1nodeinit1(node*2+1,mid+1,end);
+    return seg[node] = combine(a,b);
 }
 
 
@@ -109,10 +113,12 @@ x1node x1nodeinit2(int node, int start, int end)
 {
     if(start == end) return seg1[node] = ar1[start];
     int mid = (start + end) / 2;
-    return seg1[node] = combine(x1nodeinit1(node*2,start,mid),x1nodeinit1(node*2+1,mid+1,end));
+    x1node a = x1nodeinit2(node*2,start,mid);
+    x1node b = x1nodeinit2(node*2+1,mid+1,end);
+    return seg[node] = combine(a,b);
 }
 
-x2node nodeinit(x2node r)
+x2node nodeinit(x2node &r)
 {
     r.arr[0] = 4*r.n*t*t + 4*r.n*t + r.n; //(2t+1)(2t+1)
     r.arr[1] = 2*r.n*t*t - 2*t*r.y + 3*r.n*t -r.y + r.n; //(t-y+1)(2t+1)
@@ -121,7 +127,7 @@ x2node nodeinit(x2node r)
     return r;
 }
 
-x1node nodeinit(x1node x1)
+x1node nodeinit(x1node &x1)
 {
     x1node r;
     x2node r1,r2,tm,tp;
@@ -137,13 +143,14 @@ x1node nodeinit(x1node x1)
     tp.y = t;
     int a,b;
     if (x1.ar[n-1] < tm) a = n - 1;
-    else a = lower_bound(&x1.ar[0],&x1.ar[n-1],tm) - &x1.ar[0] - 1;
+    else a = lower_bound(x1.ar.begin(),x1.ar.end(),tm) - x1.ar.begin() - 1;
     if (x1.ar[n-1].y <= tp.y) b = n - 1;
-    else b = upper_bound(&x1.ar[0],&x1.ar[n-1],tp) - &x1.ar[0] - 1;
-
+    else b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
+    //clock_t start = clock();
     if (x1.n>0&&a>=0) r1=query(x1.seg,1,0,x1.n-1,0,a);
     a++;
     if (x1.n>0&&b>=a) r2=query(x1.seg,1,0,x1.n-1,a,b);
+    //cout << (clock()-start)*100000000.0/CLOCKS_PER_SEC << endl << endl;
     for(int i=0;i<4;i++)
     {
         if(i%2==0) r.arr[i] = r1.arr[i];
@@ -153,7 +160,7 @@ x1node nodeinit(x1node x1)
 }
 
 
-x2node query(vector<x2node> seg,int node, int start, int end, int left, int right)
+x2node query(vector<x2node> &seg,int node, int start, int end, int left, int right)
 {
     x2node I;
     if (left > end || right < start)     
@@ -163,10 +170,13 @@ x2node query(vector<x2node> seg,int node, int start, int end, int left, int righ
     }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
-    return combine(query(seg,node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
+    x2node a=query(seg,node*2,start,mid,left,right);
+    x2node b=query(seg,node*2+1,mid+1,end,left,right);
+    for (int i=0;i<4;i++) I.arr[i]=a.arr[i]+b.arr[i];
+    return I;
 }
 
-x1node query(vector<x1node> seg,int node, int start, int end, int left, int right)
+x1node query(vector<x1node> &seg,int node, int start, int end, int left, int right)
 {
     x1node I;
     if (left > end || right < start) 
@@ -176,11 +186,14 @@ x1node query(vector<x1node> seg,int node, int start, int end, int left, int righ
     }
     if (left <= start && end <= right) return nodeinit(seg[node]);
     int mid = (start + end)/2;
-    return combine(query(seg, node*2,start,mid,left,right),query(seg,node*2+1,mid+1,end,left,right));
+    x1node a = query(seg, node*2,start,mid,left,right);
+    x1node b = query(seg,node*2+1,mid+1,end,left,right);
+    return combine(a,b);
 }
 
 long long result(vector<x1node> &seg,vector<x1node> &ar)
 {
+    clock_t start = clock();
     x1node r1,r2,tm,tp;
     int a,b;
     tm.x = -t;
@@ -190,18 +203,18 @@ long long result(vector<x1node> &seg,vector<x1node> &ar)
         r1.arr[i]=0;
         r2.arr[i]=0;
     }
-    int pow = 1;
-    for (int m=0;n>pow;m++) pow*=2;
     long long r=0;
     if (ar[n-1] < tm) a = n - 1;
-    else a = lower_bound(&ar[0],&ar[n-1],tm) - &ar[0] - 1;
+    else a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin() - 1;
     if (ar[n-1].x <= tp.x) b = n - 1;
-    else b = upper_bound(&ar[0],&ar[n-1],tp) - &ar[0] - 1;
+    else b = upper_bound(ar.begin(),ar.end(),tp) - ar.begin() - 1;
+    //cout << (clock()-start)*100000000/CLOCKS_PER_SEC << endl;
     if (n>0&&a>=0) r1=query(seg,1,0,n-1,0,a);
     a++;
     if (n>0&&b>=a) r2=query(seg,1,0,n-1,a,b);
     for (int i=0;i<2;i++) r += r1.arr[i];
     for (int i=2;i<4;i++) r += r2.arr[i];
+    //cout << (clock()-start)*100000000/CLOCKS_PER_SEC << endl << endl;
     return r;
 }
 
