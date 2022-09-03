@@ -35,10 +35,6 @@ long long zz=0;
 
 void query(vector<x2node> &seg,int node, int start, int end, int left, int right,long long* r);
 void query(vector<x1node> &seg,int node, int start, int end, int left, int right,long long* r);
-x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end);
-
-
-
 
 void x1init(x1node &a,long long x,long long y)
 {
@@ -63,15 +59,6 @@ x2node combine (x2node &a,x2node &b)
     r.y=a.y+b.y;
     r.xy=a.xy+b.xy;
     return r;
-}
-
-x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end)
-{
-    if(start == end) return seg[node] = ar[start];
-    int mid = (start + end) / 2;
-    x2node a = x2nodeinit(seg,ar,node*2,start,mid);
-    x2node b = x2nodeinit(seg,ar,node*2+1,mid+1,end);
-    return seg[node] = combine(a,b);
 }
 
 void combine (x1node &a,x1node &b,x1node &r)
