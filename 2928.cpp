@@ -17,7 +17,7 @@ struct x2node{
 };
 
 struct x1node{
-    long long x=0,n=0;
+    int x,n=0;
     vector<x2node> seg,ar;
     bool operator< (const x1node &a) const
     {
