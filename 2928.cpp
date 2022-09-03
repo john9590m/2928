@@ -29,7 +29,7 @@ struct x1node{
 vector<x1node> seg,ar,seg1,ar1;
 long long arr[4];
 long long m,t=-1;
-int n;
+int n,capacity;
 
 long long zz=0;
 
@@ -118,9 +118,10 @@ long long* nodeinit(x2node &r,long long* l)
 
 void nodeinit(x1node &x1,long long* r)
 {
-    long long r1[4],r2[4];
+    long long r1[4],r2[4],temp[4];
     x2node tm,tp;
     long long n = x1.n;
+    int c,L,R;
     for (int i=0;i<4;i++)
     {
         r[i] = 0;
@@ -136,9 +137,38 @@ void nodeinit(x1node &x1,long long* r)
     if (x1.ar[n-1].y <= tp.y) b = n - 1;
     else b = upper_bound(x1.ar.begin(),x1.ar.end(),tp) - x1.ar.begin() - 1;
     //clock_t start = clock();
-    if (x1.n>0&&a>=0) query(x1.seg,1,0,x1.n-1,0,a,r1);
+    for (c=1;c<n;c*=2);
+    L=0+c;
+    R=a+c;
+    if (x1.n>0&&a>=0) 
+    {
+        for(;L<R;L/2,R/2) 
+        {
+            for (int i=0;i<4;i++) temp[i]=0;
+            if(L%2) nodeinit(seg[L++],temp);
+            if(!(R%2)) nodeinit(seg[R--],temp);
+            for (int i=0;i<4;i++) r1[i] += temp[i];
+        }
+        for (int i=0;i<4;i++) temp[i]=0;
+        if (L==R) nodeinit(seg[L],temp);
+        for (int i=0;i<4;i++) r1[i] += temp[i];
+    }
     a++;
-    if (x1.n>0&&b>=a) query(x1.seg,1,0,x1.n-1,a,b,r2);
+    L=a+c;
+    R=b+c;
+    if (x1.n>0&&b>=a)
+    {
+        for(;L<R;L/2,R/2) 
+        {
+            for (int i=0;i<4;i++) temp[i]=0;
+            if(L%2) nodeinit(seg[L++],temp);
+            if(!(R%2)) nodeinit(seg[R--],temp);
+            for (int i=0;i<4;i++) r1[i] += temp[i];
+        }
+        for (int i=0;i<4;i++) temp[i]=0;
+        if (L==R) nodeinit(seg[L],temp);
+        for (int i=0;i<4;i++) r1[i] += temp[i];
+    }
     //cout << (clock()-start)*100000000.0/CLOCKS_PER_SEC << endl << endl;
     for(int i=0;i<4;i++)
     {
@@ -191,8 +221,8 @@ long long result(vector<x1node> &seg,vector<x1node> &ar)
 {
     clock_t start = clock();
     x1node tm,tp;
-    long long r1[4],r2[4];
-    int a,b;
+    long long r1[4],r2[4],temp[4];
+    int a,b,L,R,c;
     tm.x = -t;
     tp.x = t;
     for (int i=0;i<4;i++)
@@ -205,10 +235,38 @@ long long result(vector<x1node> &seg,vector<x1node> &ar)
     else a = lower_bound(ar.begin(),ar.end(),tm) - ar.begin() - 1;
     if (ar[n-1].x <= tp.x) b = n - 1;
     else b = upper_bound(ar.begin(),ar.end(),tp) - ar.begin() - 1;
-    //cout << (clock()-start)*100000000/CLOCKS_PER_SEC << endl;
-    if (n>0&&a>=0) query(seg,1,0,n-1,0,a,r1);
+    for (c=1;c<n;c*=2);
+    L=0+c;
+    R=a+c;
+    if (n>0&&a>=0)
+    {
+        for(;L<R;L/2,R/2) 
+        {
+            for (int i=0;i<4;i++) temp[i]=0;
+            if(L%2) nodeinit(seg[L++],temp);
+            if(!(R%2)) nodeinit(seg[R--],temp);
+            for (int i=0;i<4;i++) r1[i] += temp[i];
+        }
+        for (int i=0;i<4;i++) temp[i]=0;
+        if (L==R) nodeinit(seg[L],temp);
+        for (int i=0;i<4;i++) r1[i] += temp[i];
+    }
     a++;
-    if (n>0&&b>=a) query(seg,1,0,n-1,a,b,r2);
+    L=a+c;
+    R=b+c;
+    if (n>0&&b>=a)
+    {
+        for(;L<R;L/2,R/2) 
+        {
+            for (int i=0;i<4;i++) temp[i]=0;
+            if(L%2) nodeinit(seg[L++],temp);
+            if(!(R%2)) nodeinit(seg[R--],temp);
+            for (int i=0;i<4;i++) r1[i] += temp[i];
+        }
+        for (int i=0;i<4;i++) temp[i]=0;
+        if (L==R) nodeinit(seg[L],temp);
+        for (int i=0;i<4;i++) r1[i] += temp[i];
+    }
     for (int i=0;i<2;i++) r += r1[i];
     for (int i=2;i<4;i++) r += r2[i];
     //cout << (clock()-start)*100000000/CLOCKS_PER_SEC << endl << endl;
@@ -243,11 +301,15 @@ int main(void)
         ar1.push_back(*a);
     }
     n*=2;
+    for(capacity=1;capacity<n;capacity*=2);
     sort(ar.begin(),ar.end());
-    seg.resize(4*n);
-    x1nodeinit1(1,0,n-1);
+    seg.resize(2*capacity);
+    for (int i=0;i<n;i++) seg[capacity+i]=ar[i];
+    for (int i=capacity-1;i>0;i--) seg[i] = combine(seg[i*2],seg[i*2+1]);
     sort(ar1.begin(),ar1.end());
-    seg1.resize(4*n);
+    seg1.resize(2*capacity);
+    for (int i=0;i<n;i++) seg1[capacity+i]=ar1[i];
+    for (int i=capacity-1;i>0;i--) seg1[i] = combine(seg1[i*2],seg1[i*2+1]);
     x1nodeinit2(1,0,n-1);
     cin >> m;
     for (int i=0;i<m;i++)
