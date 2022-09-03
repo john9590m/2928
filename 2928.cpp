@@ -35,8 +35,8 @@ int n;
 
 long long zz=0;
 
-long long* query(vector<x2node> &seg,int node, int start, int end, int left, int right);
-long long* query(vector<x1node> &seg,int node, int start, int end, int left, int right);
+void query(vector<x2node> &seg,int node, int start, int end, int left, int right,long long* r);
+void query(vector<x1node> &seg,int node, int start, int end, int left, int right,long long* r);
 x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, int end);
 x1node x1nodeinit1(int node, int start, int end);
 x1node x1nodeinit2(int node, int start, int end);
@@ -163,8 +163,16 @@ long long* nodeinit(x1node &x1)
 
 void query(vector<x2node> &seg,int node, int start, int end, int left, int right,long long* r)
 {
-    if (left > end || right < start)    for (int i=0;i<4;i++) r[i] = 0;   
-    if (left <= start && end <= right)  r = nodeinit(seg[node]);
+    if (left > end || right < start)
+    {
+        for (int i=0;i<4;i++) r[i] = 0;   
+        return;
+    }
+    if (left <= start && end <= right)
+    {
+          r = nodeinit(seg[node]);
+          return;
+    }
     int mid = (start + end)/2;
     long long a[4],b[4];
     query(seg,node*2,start,mid,left,right,a);
@@ -177,8 +185,13 @@ void query(vector<x1node> &seg,int node, int start, int end, int left, int right
     if (left > end || right < start) 
     {
         for (int i=0;i<4;i++) r[i] = 0;
+        return;
     }
-    if (left <= start && end <= right) r = nodeinit(seg[node]);
+    if (left <= start && end <= right)
+    {
+         r = nodeinit(seg[node]);
+         return;
+    }
     int mid = (start + end)/2;
     long long a[4],b[4];
     query(seg, node*2,start,mid,left,right,a);
