@@ -118,9 +118,8 @@ x1node x1nodeinit2(int node, int start, int end)
     return seg[node] = combine(a,b);
 }
 
-long long* nodeinit(x2node &r)
+long long* nodeinit(x2node &r,long long* l)
 {
-    long long l[4];
     l[0] = 4*r.n*t*t + 4*r.n*t + r.n; //(2t+1)(2t+1)
     l[1] = 2*r.n*t*t - 2*t*r.y + 3*r.n*t -r.y + r.n; //(t-y+1)(2t+1)
     l[2] = 2*r.n*t*t - 2*t*r.x + 3*r.n*t -r.x + r.n; //(t-x+1)(2t+1)
@@ -128,9 +127,9 @@ long long* nodeinit(x2node &r)
     return l;
 }
 
-long long* nodeinit(x1node &x1)
+void nodeinit(x1node &x1,long long* r)
 {
-    long long r[4],r1[4],r2[4];
+    long long r1[4],r2[4];
     x2node tm,tp;
     long long n = x1.n;
     for (int i=0;i<4;i++)
@@ -139,7 +138,7 @@ long long* nodeinit(x1node &x1)
         r1[i]=0;
         r2[i]=0;
     }
-    if (x1.n == 0) return r;
+    if (x1.n == 0) return;
     tm.y = -t;
     tp.y = t;
     int a,b;
@@ -157,7 +156,7 @@ long long* nodeinit(x1node &x1)
         if(i%2==0) r[i] = r1[i];
         else r[i] = r2[i];
     }
-    return r;
+    return;
 }
 
 
@@ -170,7 +169,7 @@ void query(vector<x2node> &seg,int node, int start, int end, int left, int right
     }
     if (left <= start && end <= right)
     {
-          r = nodeinit(seg[node]);
+          nodeinit(seg[node],r);
           return;
     }
     int mid = (start + end)/2;
@@ -189,7 +188,7 @@ void query(vector<x1node> &seg,int node, int start, int end, int left, int right
     }
     if (left <= start && end <= right)
     {
-         r = nodeinit(seg[node]);
+         nodeinit(seg[node],r);
          return;
     }
     int mid = (start + end)/2;
