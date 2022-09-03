@@ -10,7 +10,6 @@ struct x2node{
     long long y=0;
     long long xy=0;
     int n=0;
-    long long arr[4];
     bool operator< (const x2node &a) const
     {
         return y<a.y;
@@ -19,7 +18,6 @@ struct x2node{
 
 struct x1node{
     long long x=0,n=0;
-    long long arr[4];
     vector<x2node> seg,ar;
     bool operator< (const x1node &a) const
     {
@@ -49,7 +47,6 @@ void x1init(x1node &a,long long x,long long y)
     x2node b;
     a.n=1;
     a.x = x;
-    for (int i =0; i<4; i++) b.arr[i]=0;
     b.n=1;
     b.x=x;
     b.y=y;
@@ -63,14 +60,10 @@ void x1init(x1node &a,long long x,long long y)
 x2node combine (x2node &a,x2node &b)
 {
     x2node r;
-    for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
-    if (t==-1)
-    {
-        r.n=a.n+b.n;
-        r.x=a.x+b.x;
-        r.y=a.y+b.y;
-        r.xy=a.xy+b.xy;
-    }
+    r.n=a.n+b.n;
+    r.x=a.x+b.x;
+    r.y=a.y+b.y;
+    r.xy=a.xy+b.xy;
     return r;
 }
 
@@ -86,16 +79,12 @@ x2node x2nodeinit(vector<x2node> &seg,vector<x2node> &ar, int node, int start, i
 x1node combine (x1node &a,x1node &b)
 {
     x1node r;
-    for (int i=0;i<4;i++) r.arr[i]=a.arr[i]+b.arr[i];
-    if (t==-1)
-    {
-        r.ar = a.ar;
-        for (x2node i : b.ar) r.ar.push_back(i);
-        r.n = a.n+b.n;
-        sort(r.ar.begin(),r.ar.end()); 
-        r.seg.resize(4*r.n);
-        x2nodeinit(r.seg,r.ar,1,0,r.n-1);
-    }
+    r.ar = a.ar;
+    for (x2node i : b.ar) r.ar.push_back(i);
+    r.n = a.n+b.n;
+    sort(r.ar.begin(),r.ar.end()); 
+    r.seg.resize(4*r.n);
+    x2nodeinit(r.seg,r.ar,1,0,r.n-1);
     return r;
 }
 
@@ -103,7 +92,7 @@ x1node x1nodeinit1(int node, int start, int end)
 {
     if(start == end) return seg[node] = ar[start];
     int mid = (start + end) / 2;
-    x1node a =x1nodeinit1(node*2,start,mid);
+    x1node a = x1nodeinit1(node*2,start,mid);
     x1node b = x1nodeinit1(node*2+1,mid+1,end);
     return seg[node] = combine(a,b);
 }
@@ -115,7 +104,7 @@ x1node x1nodeinit2(int node, int start, int end)
     int mid = (start + end) / 2;
     x1node a = x1nodeinit2(node*2,start,mid);
     x1node b = x1nodeinit2(node*2+1,mid+1,end);
-    return seg[node] = combine(a,b);
+    return seg1[node] = combine(a,b);
 }
 
 long long* nodeinit(x2node &r,long long* l)
@@ -239,7 +228,6 @@ int main(void)
     {
         a = new x1node();
         cin >> x1 >> y1 >> x2 >> y2;
-        for (int i=0; i<4; i++)  a->arr[i] = 0;
         x2++;
         y2++;
         x1init(*a,x1,y1);
