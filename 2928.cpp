@@ -4,13 +4,41 @@
 
 using namespace std;
 
+typedef struct node
+{
+    long long var=0;
+    long long tvar=0;
+    int n=1;
+    node operator+= (node &a)
+    {
+        var += a.var;
+        tvar += a.tvar;
+        return *this;
+    }
+};
 
 int n,m;
-long long seg[210001];
+node seg[270001];
+
+long long calc (int idx)
+{
+    long long result = seg[idx].n*seg[idx].var;
+    result += idx*seg[idx].tvar;
+    result += seg[idx].n*(seg[idx].n+1)/ 2 * seg[idx].tvar;
+    return result;
+}
 
 long long query(int start,int end)
 {
     long long result = 0;
+    start += 100000;
+    end += 100000;
+    for (; start<end; start/=2, end/=2)
+    {
+        if(start%2) result+=calc(start++);
+        if (!(end%2)) result+=calc(end--);
+    }
+    if (start==end) result+=calc(start);
     return result;
 }
 
@@ -18,7 +46,15 @@ void update(int start, int end, long long var, long long tvar)
 {
     start += 100000;
     end += 100000;
-    
+    node data;
+    data.var=var;
+    data.tvar=tvar;
+    for (; start<end; start/=2, end/=2)
+    {
+        if(start%2) seg[start++] += data;
+        if (!(end%2)) seg[end--] += data;
+    }
+    if (start==end) seg[start] += data;
 }
 
 int main(void)
@@ -27,6 +63,11 @@ int main(void)
     int x1,x2,y1,y2;
     int x[4];
     vector<pair<int,int>> temp;
+    int cap;
+    int ten=100000;
+    for (cap=1;cap<ten;cap*=2);
+    for(int i = cap+ten;i<cap*2;i++) seg[i].n = 0;
+    for(int i = cap -1 ; i>0 ; i--) seg[i].n = seg[i*2].n+seg[i*2+1].n;
     for (int i=0;i<n;i++)
     {
         int count = 0;
@@ -66,6 +107,6 @@ int main(void)
         int t;
         cin >> t;
         accumulate += query(last_t,t);
-        cout << accumulate;
+        cout << accumulate << endl;
     }
 }
