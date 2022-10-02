@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -31,8 +32,8 @@ long long calc (int idx)
 long long query(int start,int end)
 {
     long long result = 0;
-    start += 100000;
-    end += 100000;
+    start += 1000000;
+    end += 1000000;
     for (; start<end; start/=2, end/=2)
     {
         if(start%2) result+=calc(start++);
@@ -44,6 +45,8 @@ long long query(int start,int end)
 
 void update(int start, int end, long long var, long long tvar)
 {
+    start=abs(start);
+    end=abs(end);
     start += 100000;
     end += 100000;
     node data;
