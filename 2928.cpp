@@ -18,7 +18,7 @@ typedef struct node
 };
 
 int n,m;
-node seg[270001];
+node seg[2700010];
 
 long long calc (int idx)
 {
@@ -64,7 +64,7 @@ int main(void)
     int x[4];
     vector<pair<int,int>> temp;
     int cap;
-    int ten=100000;
+    int ten=1000000;
     for (cap=1;cap<ten;cap*=2);
     for(int i = cap+ten;i<cap*2;i++) seg[i].n = 0;
     for(int i = cap -1 ; i>0 ; i--) seg[i].n = seg[i*2].n+seg[i*2+1].n;
