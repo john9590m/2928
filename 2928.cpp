@@ -166,7 +166,7 @@ void getnode(int t,long long a)
 {
     node result;
     result.var = (min(x[2],t) - max(x[0],-t) +1)*(min(x[3],t)-max(x[1],-t)+1)-a;
-    seg[ten+t] += result;
+    seg[cap+t] += result;
 }
 int main(void)
 {
