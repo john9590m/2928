@@ -186,11 +186,11 @@ int main(void)
         for (int k=0;k<4;k++) temp.push_back(abs(x[k]));
         sort(temp.begin(),temp.end());
         getnode(0,count);
-        count+=update(1,temp[0]-1,getval(1));
-        for (i=0;i<3;i++)
+        if (temp[0]>1) count+=update(1,temp[0]-1,getval(1));
+        for (int j=0;j<3;j++)
         {
-            getnode(temp[i],count);
-            count += update(temp[i]+1,temp[i+1]-1,getval(temp[i]));
+            getnode(temp[j],count);
+            if (temp[j+1]-temp[j]>1) count += update(temp[j]+1,temp[j+1]-1,getval(temp[j]));
         } 
     }
     cin >> m;
