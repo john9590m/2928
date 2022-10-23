@@ -22,6 +22,7 @@ int n,m;
 int x[4];
 node seg[2700010];
 int ten=1000000;
+int cap;
 
 long long calc (int idx)
 {
@@ -33,8 +34,8 @@ long long calc (int idx)
 long long query(int start,int end)
 {
     long long result = 0;
-    start += ten;
-    end += ten;
+    start += cap;
+    end += cap;
     for (int i=start;i<=end;i++)
     {
         for (int j=i;j>0;j/=2) result += calc(j);
@@ -46,8 +47,8 @@ long long update(int start, int end, node data)
 {
     start=abs(start);
     end=abs(end);
-    start += ten;
-    end += ten;
+    start += cap;
+    end += cap;
     int n = 1;
     for (; start<end; start/=2, end/=2)
     {
@@ -172,7 +173,6 @@ int main(void)
     cin >> n;
     int x1,x2,y1,y2;
     vector<int> temp;
-    int cap;
     node data;
     for (cap=1;cap<ten;cap*=2);
     for(int i = cap+ten;i<cap*2;i++) seg[i].n = 0;
