@@ -187,7 +187,7 @@ int main(void)
         if (temp[0]>1) count+=update(1,temp[0]-1,getval(1));
         for (int j=0;j<3;j++)
         {
-            getnode(temp[j],count);
+            if ((j==0 && temp[j]>0) || (j>0 && temp[j]>temp[j-1])) getnode(temp[j],count);
             if (temp[j+1]-temp[j]>1) count += update(temp[j]+1,temp[j+1]-1,getval(temp[j]));
         } 
     }
