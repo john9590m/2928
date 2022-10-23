@@ -35,12 +35,10 @@ long long query(int start,int end)
     long long result = 0;
     start += ten;
     end += ten;
-    for (; start<end; start/=2, end/=2)
+    for (int i=start;i<=end;i++)
     {
-        if(start%2) result+=calc(start++);
-        if (!(end%2)) result+=calc(end--);
+        for (int j=i;j>0;j/=2) result += calc(j);
     }
-    if (start==end) result+=calc(start);
     return result;
 }
 
