@@ -166,8 +166,12 @@ long long getnode(int t,long long a)
 {
     node result;
     result.var = (min(x[2],t) - max(x[0],-t) +1)*(min(x[3],t)-max(x[1],-t)+1)-a;
-    seg[cap+t] += result;
-    return result.var;
+    if (result.var>0) 
+    { 
+        seg[cap+t] += result;
+        return result.var;
+    }
+    return 0;
 }
 int main(void)
 {
