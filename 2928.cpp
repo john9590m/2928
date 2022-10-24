@@ -20,16 +20,9 @@ struct node
 
 int n,m;
 int x[4];
-node seg[2700010];
+long long seg[2700010];
 int ten=1000000;
 int cap;
-
-long long calc (int idx)
-{
-    long long result = seg[idx].n*seg[idx].var;
-    result += seg[idx].n*(seg[idx].n+1)/ 2 * seg[idx].tvar;
-    return result;
-}
 
 long long query(int start,int end)
 {
@@ -38,28 +31,26 @@ long long query(int start,int end)
     end += cap;
     for (int i=start;i<=end;i++)
     {
-        for (int j=i;j>0;j/=2) result += calc(j);
+        for (int j=i;j>0;j/=2) result += seg[j];
     }
     return result;
 }
 
 long long update(int start, int end, node data)
 {
-    start=abs(start);
-    end=abs(end);
     start += cap;
     end += cap;
+    int s = start;
+    int e = end;
     int n = 1;
-    for (; start<end; start/=2, end/=2)
+    for (; s<e; s/=2, e/=2)
     {
-        data.n=n;
-        if(start%2) seg[start++] += data;
-        if (!(end%2)) seg[end--] += data;
+        if(s%2) seg[s++] += n*(2*(s*n-start)*data.tvar + (n-1)* data.tvar)/2;
+        if (!(e%2)) seg[e--] += n*(2*(e*n-start)*data.tvar + (n-1)* data.tvar)/2;
         n*=2;
     }
-    if (start==end) seg[start] += data;
-    n = end - start + 1;
-    return n*data.var + n*(n+1)/2 * data.tvar;
+    if (s==e) seg[s] += n*(2*(s*n-start)*data.tvar + (n-1)* data.tvar)/2;
+    return n*(2*(end*n-start)*data.tvar + (n-1)* data.tvar)/2;
 }
 node getval(int t)
 {
@@ -80,7 +71,7 @@ node getval(int t)
                 else 
                 {
                     result.tvar = 2;
-                    result.var = x[2]+ t + t - x[1] + 1;
+                    result.var = t - x[0] + t - x[1] + 1; //
                 }
             }
         }
@@ -164,12 +155,12 @@ node getval(int t)
 
 long long getnode(int t,long long a)
 {
-    node result;
-    result.var = (min(x[2],t) - max(x[0],-t) +1)*(min(x[3],t)-max(x[1],-t)+1)-a;
-    if (result.var>0) 
+    long long result;
+    result = (min(x[2],t) - max(x[0],-t) +1)*(min(x[3],t)-max(x[1],-t)+1)-a;
+    if (result>0) 
     { 
         seg[cap+t] += result;
-        return result.var;
+        return result;
     }
     return 0;
 }
@@ -180,8 +171,6 @@ int main(void)
     vector<int> temp;
     node data;
     for (cap=1;cap<ten;cap*=2);
-    for(int i = cap+ten;i<cap*2;i++) seg[i].n = 0;
-    for(int i = cap -1 ; i>0 ; i--) seg[i].n = seg[i*2].n+seg[i*2+1].n;
     for (int i=0;i<n;i++)
     {
         long long count = 0;
@@ -207,5 +196,6 @@ int main(void)
         cin >> t;
         accumulate += query(last_t,t);
         cout << accumulate << endl;
+        last_t = t;
     }
 }
