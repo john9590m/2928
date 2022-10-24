@@ -5,7 +5,7 @@
 
 using namespace std;
 
-typedef struct node
+struct node
 {
     long long var=0;
     long long tvar=0;
@@ -190,7 +190,8 @@ int main(void)
         {
             if ((j==0 && temp[j]>0) || (j>0 && temp[j]>temp[j-1])) count += getnode(temp[j],count);
             if (temp[j+1]-temp[j]>1) count += update(temp[j]+1,temp[j+1]-1,getval(temp[j]));
-        } 
+        }
+        if (temp[3]>temp[2]) count+=getnode(temp[3],count);
         temp.clear();
     }
     cin >> m;
