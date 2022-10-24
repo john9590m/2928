@@ -162,11 +162,12 @@ node getval(int t)
     return result;
 }
 
-void getnode(int t,long long a)
+long long getnode(int t,long long a)
 {
     node result;
     result.var = (min(x[2],t) - max(x[0],-t) +1)*(min(x[3],t)-max(x[1],-t)+1)-a;
     seg[cap+t] += result;
+    return result.var;
 }
 int main(void)
 {
@@ -183,13 +184,14 @@ int main(void)
         cin >> x[0] >> x[1] >> x[2] >> x[3]; //x1 y1 x2 y2 
         for (int k=0;k<4;k++) temp.push_back(abs(x[k]));
         sort(temp.begin(),temp.end());
-        getnode(0,count);
+        count += getnode(0,count);
         if (temp[0]>1) count+=update(1,temp[0]-1,getval(1));
         for (int j=0;j<3;j++)
         {
-            if ((j==0 && temp[j]>0) || (j>0 && temp[j]>temp[j-1])) getnode(temp[j],count);
+            if ((j==0 && temp[j]>0) || (j>0 && temp[j]>temp[j-1])) count += getnode(temp[j],count);
             if (temp[j+1]-temp[j]>1) count += update(temp[j]+1,temp[j+1]-1,getval(temp[j]));
         } 
+        temp.clear();
     }
     cin >> m;
     int last_t = 0;
