@@ -9,7 +9,7 @@ int main(void)
     for (int i=0;i<n;i++)
     {
         for (int j=0;j<4;j++) cout << rand()%2000000 - 1000000 << " ";
-        cout <<endl;
+        cout << endl;
     }
     int m=100000;
     cout << m << endl;
